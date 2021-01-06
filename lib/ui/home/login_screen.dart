@@ -30,7 +30,7 @@ class Login extends StatelessWidget {
                   style: TextStyle(fontSize: 50),
                 ),
                 SizedBox(height: 90),
-                Text('E-mail'),
+                Text('Email'),
                 SizedBox(height: 10),
                 Container(
                     width: Get.width - 40,
