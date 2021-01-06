@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "7913358512",
+    "project_id": "travel-record-93fbe",
+    "storage_bucket": "travel-record-93fbe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:7913358512:android:23e6273bc31bad8b5d6775",
+        "android_client_info": {
+          "package_name": "com.ysh.travel_record"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "7913358512-fjbektr7644gt7qiqopps3fau0a1kn0b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD29ck3P31u65ySeSilslwp2Xqw2GvfYp0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "7913358512-fjbektr7644gt7qiqopps3fau0a1kn0b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
