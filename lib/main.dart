@@ -7,13 +7,20 @@ import 'package:travel_record/ui/home/home_screen.dart';
 import 'package:travel_record/ui/home/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart' as firebase_core;
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
+import './data/users/user_class.dart';
 
-
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await firebase_core.Firebase.initializeApp();
   await Firebase.initializeApp();
-
+  final directory = await getApplicationDocumentsDirectory();
+  print(directory.path);
+  Hive
+    ..init(directory.path)
+    ..registerAdapter(UserAdapter());
+  var box = await Hive.openBox('userBox');
 
   runApp(GetMaterialApp(
     // It is not mandatory to use named routes, but dynamic urls are interesting.

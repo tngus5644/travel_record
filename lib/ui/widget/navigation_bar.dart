@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:travel_record/ui/home/home_screen.dart';
+import 'package:get/get.dart ';
 
 BottomNavigationBar navigationBar() {
-  BottomNavigationBar myBar = new BottomNavigationBar(items: [
-    BottomNavigationBarItem(icon: Icon(Icons.home_sharp), title: Text("Home"), ),
 
-    BottomNavigationBarItem(icon: Icon(Icons.search), title: Text("Search")),
 
-    BottomNavigationBarItem(icon: Icon(Icons.settings), title: Text("Profile")),
-  ]);
+  BottomNavigationBar myBar = BottomNavigationBar(
+
+  );
 
   return myBar;
 }

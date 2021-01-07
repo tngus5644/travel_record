@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-GridView homeGridView() {
-  GridView homeGridView = new GridView.builder(
+Widget homeGridView() {
+  return GridView.builder(
       physics: NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemCount: 4,
@@ -25,5 +25,4 @@ GridView homeGridView() {
         );
       });
 
-  return homeGridView;
 }

@@ -4,16 +4,23 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_record/data/users/user_class.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
 
 class Login extends StatelessWidget {
   TextEditingController emailcontroller;
   TextEditingController pwcontroller;
   FirebaseFirestore db = FirebaseFirestore.instance;
   FirebaseStorage fs = FirebaseStorage.instance;
+var box = Hive.box('userBox');
+
+
+  User user = new User();
+
+
 
   @override
   Widget build(BuildContext context) {
-    final user = new User().obs;
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Row(
@@ -69,9 +76,13 @@ class Login extends StatelessWidget {
                             .doc("tngus5644")
                             .get()
                             .then((DocumentSnapshot ds) {
-                          user.value = parseUser(ds.data());
+                          user = parseUser(ds.data());
+
+                          print(user.email.toString());
+                          print(user.name.toString());
+                          box.put('user',user);
                         });
-                        Get.offAllNamed('/home', arguments: user);
+                        Get.offAllNamed('/home');
                       },
                       child: Text('Login'),
                       color: Colors.blueAccent,
