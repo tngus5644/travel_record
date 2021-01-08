@@ -1,7 +1,9 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:travel_record/ui/widget/home_gridview.dart';
-import 'package:travel_record/ui/widget/home_profile.dart';
+import 'package:travel_record/ui/home/home_home_screen.dart';
+import 'package:travel_record/ui/home/home_profile_screen.dart';
+import 'package:travel_record/ui/widget/home_home_widget.dart';
+import 'package:travel_record/ui/widget/home_profile_userwidget.dart';
 import 'package:travel_record/ui/widget/navigation_bar.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -13,7 +15,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _selectedIndex = 0;
-  List _pages = [homeGridView(), Text('page2'), profileColumn()];
+  List _pages = [HomeHome(), Text('page2'), HomeProfile()];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -44,7 +46,7 @@ class _HomeState extends State<Home> {
           ],
           type: BottomNavigationBarType.fixed,
           currentIndex: _selectedIndex,
-          selectedItemColor: Colors.amber[800],
+          selectedItemColor: Colors.blueAccent[800],
           unselectedItemColor: Colors.grey,
           onTap: _onItemTapped),
     );

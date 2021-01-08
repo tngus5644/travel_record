@@ -16,7 +16,6 @@ void main() async {
   await firebase_core.Firebase.initializeApp();
   await Firebase.initializeApp();
   final directory = await getApplicationDocumentsDirectory();
-  print(directory.path);
   Hive
     ..init(directory.path)
     ..registerAdapter(UserAdapter());
