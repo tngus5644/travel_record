@@ -8,7 +8,7 @@ import 'package:travel_record/ui/widget/home_profile_socialwidget.dart';
 class HomeProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var box = Hive.box('userBox');
+    var box = Hive.box('box');
     User user = box.get('user');
     print(user.name);
     print(user.email);

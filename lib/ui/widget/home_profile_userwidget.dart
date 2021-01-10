@@ -4,7 +4,7 @@ import 'package:travel_record/data/users/user_class.dart';
 import 'package:hive/hive.dart';
 
 Widget homeProfileUserWidget() {
-  var box = Hive.box('userBox');
+  var box = Hive.box('box');
   User user = box.get('user');
   final sex = true.obs;
   return Column(

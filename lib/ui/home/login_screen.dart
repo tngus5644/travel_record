@@ -1,26 +1,27 @@
+import 'package:travel_record/data/group/group_class.dart';
+import 'package:travel_record/data/users/user_class.dart';
+
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:get/get.dart';
-import 'package:flutter/material.dart';
-import 'package:travel_record/data/users/user_class.dart';
-import 'package:get/get.dart';
+
 import 'package:hive/hive.dart';
 
+
 class Login extends StatelessWidget {
-  TextEditingController emailcontroller;
-  TextEditingController pwcontroller;
+  TextEditingController emailController;
+  TextEditingController pwController;
   FirebaseFirestore db = FirebaseFirestore.instance;
   FirebaseStorage fs = FirebaseStorage.instance;
-var box = Hive.box('userBox');
-
+  var box = Hive.box('box');
 
   User user = new User();
-
-
+  Group group = new Group();
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: SingleChildScrollView(
         child: Row(
@@ -43,7 +44,7 @@ var box = Hive.box('userBox');
                     width: Get.width - 40,
                     child: TextField(
                       autofocus: true,
-                      controller: emailcontroller,
+                      controller: emailController,
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
                           hintText: 'example@email.com',
@@ -51,12 +52,11 @@ var box = Hive.box('userBox');
                     )),
                 SizedBox(height: 20),
                 Text('password2'),
-
                 SizedBox(height: 10),
                 Container(
                     width: Get.width - 40,
                     child: TextField(
-                      controller: pwcontroller,
+                      controller: pwController,
                       obscureText: true,
                       decoration: InputDecoration(border: OutlineInputBorder()),
                     )),
@@ -77,10 +77,15 @@ var box = Hive.box('userBox');
                             .get()
                             .then((DocumentSnapshot ds) {
                           user = parseUser(ds.data());
-
-                          print(user.email.toString());
-                          print(user.name.toString());
-                          box.put('user',user);
+                          box.put('user', user);
+                        });
+                        db
+                            .collection("group")
+                            .doc("송우리")
+                            .get()
+                            .then((DocumentSnapshot ds) {
+                          group = parseGroup(ds.data());
+                          box.put('group', group);
                         });
                         Get.offAllNamed('/home');
                       },

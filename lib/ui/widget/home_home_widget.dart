@@ -6,18 +6,10 @@ import 'package:hive/hive.dart';
 import 'package:travel_record/data/users/user_class.dart';
 
 Widget homeHomeWidget() {
-  var box = Hive.box('userBox');
+  var box = Hive.box('box');
   User user = box.get('user');
-  print(user.belongGroup.toString());
   FirebaseFirestore db = FirebaseFirestore.instance;
-  print(user.belongGroup[0].toString());
-  db
-      .collection("group")
-      .doc(user.belongGroup[0].toString())
-      .get()
-      .then((DocumentSnapshot ds) {
-    print(ds.data().toString());
-  });
+
   return GridView.builder(
       physics: NeverScrollableScrollPhysics(),
       shrinkWrap: true,

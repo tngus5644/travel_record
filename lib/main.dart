@@ -1,26 +1,32 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:travel_record/data/group/group_class.dart';
+import 'package:travel_record/data/users/user_class.dart';
 import 'package:travel_record/ui/group/group_home_screen.dart';
+import 'package:travel_record/ui/home/home_make_group_screen.dart';
 import 'package:travel_record/ui/home/home_screen.dart';
 import 'package:travel_record/ui/home/login_screen.dart';
+
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
 import 'package:firebase_core/firebase_core.dart' as firebase_core;
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:hive/hive.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+
 import 'package:path_provider/path_provider.dart';
-import './data/users/user_class.dart';
+
+import 'package:hive/hive.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await firebase_core.Firebase.initializeApp();
   await Firebase.initializeApp();
   final directory = await getApplicationDocumentsDirectory();
-  Hive
-    ..init(directory.path)
-    ..registerAdapter(UserAdapter());
-  var box = await Hive.openBox('userBox');
+  Hive.init(directory.path);
+  Hive.registerAdapter(UserAdapter());
+  // ..registerAdapter(GroupAdapter());
 
+  var box = await Hive.openBox('box');
   runApp(GetMaterialApp(
     // It is not mandatory to use named routes, but dynamic urls are interesting.
     initialRoute: '/login',
@@ -32,14 +38,14 @@ void main() async {
       GetPage(
         name: '/login',
         page: () => Login(),
-        // customTransition: SizeTransitions(),
-        // binding: SampleBind(),
       ),
-      // GetPage with default transitions
-
       GetPage(
         name: '/GroupHome',
         page: () => GroupHome(),
+      ),
+      GetPage(
+        name: '/makeGroup',
+        page: () => HomeMakeGroup(),
       ),
     ],
   ));
