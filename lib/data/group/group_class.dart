@@ -1,6 +1,3 @@
-import 'package:hive/hive.dart';
-
-part 'group_class.g.dart';
 
 ///flutter pub run build_runner build
 ///
@@ -9,19 +6,12 @@ Group parseGroup(Map<String, dynamic> responseBody) {
   return group;
 }
 
-@HiveType(typeId: 1)
-class Group extends HiveObject {
-  @HiveField(10)
+class Group  {
   String createAt;
-  @HiveField(11)
   dynamic mainImage;
-  @HiveField(12)
   String name;
-  @HiveField(13)
   String introduce;
-  @HiveField(14)
   String leader;
-  @HiveField(15)
   List member;
 
   Group(

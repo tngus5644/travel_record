@@ -2,12 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 import 'package:travel_record/data/users/user_class.dart';
 
 Widget homeHomeWidget() {
-  var box = Hive.box('box');
-  User user = box.get('user');
+  User user = new User();
   FirebaseFirestore db = FirebaseFirestore.instance;
 
   return GridView.builder(

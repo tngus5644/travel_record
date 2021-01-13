@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:travel_record/data/users/user_class.dart';
-import 'package:hive/hive.dart';
 
 Widget homeProfileUserWidget() {
-  var box = Hive.box('box');
-  User user = box.get('user');
+  User user = new User();
   final sex = true.obs;
   return Column(
     children: [

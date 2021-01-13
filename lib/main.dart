@@ -15,18 +15,15 @@ import 'package:firebase_core/firebase_core.dart';
 
 import 'package:path_provider/path_provider.dart';
 
-import 'package:hive/hive.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await firebase_core.Firebase.initializeApp();
   await Firebase.initializeApp();
   final directory = await getApplicationDocumentsDirectory();
-  Hive.init(directory.path);
-  Hive.registerAdapter(UserAdapter());
-  // ..registerAdapter(GroupAdapter());
 
-  var box = await Hive.openBox('box');
+
+
   runApp(GetMaterialApp(
     // It is not mandatory to use named routes, but dynamic urls are interesting.
     initialRoute: '/login',

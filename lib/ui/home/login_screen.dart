@@ -7,7 +7,6 @@ import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
-import 'package:hive/hive.dart';
 
 
 class Login extends StatelessWidget {
@@ -15,7 +14,6 @@ class Login extends StatelessWidget {
   TextEditingController pwController;
   FirebaseFirestore db = FirebaseFirestore.instance;
   FirebaseStorage fs = FirebaseStorage.instance;
-  var box = Hive.box('box');
 
   User user = new User();
   Group group = new Group();
@@ -77,7 +75,6 @@ class Login extends StatelessWidget {
                             .get()
                             .then((DocumentSnapshot ds) {
                           user = parseUser(ds.data());
-                          box.put('user', user);
                         });
                         db
                             .collection("group")
@@ -85,7 +82,6 @@ class Login extends StatelessWidget {
                             .get()
                             .then((DocumentSnapshot ds) {
                           group = parseGroup(ds.data());
-                          box.put('group', group);
                         });
                         Get.offAllNamed('/home');
                       },
