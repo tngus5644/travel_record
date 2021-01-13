@@ -1,8 +1,10 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:travel_record/data/group/group_class.dart';
+import 'package:travel_record/data/users/user_class.dart';
 import 'package:travel_record/ui/home/home_home_screen.dart';
 import 'package:travel_record/ui/home/home_profile_screen.dart';
-import 'package:travel_record/ui/widget/home_home_widget.dart';
 import 'package:travel_record/ui/widget/home_profile_userwidget.dart';
 import 'package:travel_record/ui/widget/navigation_bar.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -14,6 +16,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  FirebaseFirestore db = FirebaseFirestore.instance;
   int _selectedIndex = 0;
   List _pages = [HomeHome(), Text('page2'), HomeProfile()];
 

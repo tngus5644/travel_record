@@ -14,7 +14,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'package:path_provider/path_provider.dart';
-
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive/hive.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,7 +23,16 @@ void main() async {
   await Firebase.initializeApp();
   final directory = await getApplicationDocumentsDirectory();
 
+  Hive
+    ..init(directory.path)
+    ..registerAdapter(UserAdapter())
+    ..registerAdapter(GroupAdapter())
+    ..initFlutter();
 
+  Hive.deleteBoxFromDisk('userBox');
+  Hive.deleteBoxFromDisk('groupBox');
+  await Hive.openBox('userBox');
+  await Hive.openBox('groupBox');
 
   runApp(GetMaterialApp(
     // It is not mandatory to use named routes, but dynamic urls are interesting.
@@ -30,12 +40,16 @@ void main() async {
     defaultTransition: Transition.native,
     getPages: [
       //Simple GetPage
-      GetPage(name: '/home', page: () => Home()),
-      // GetPage with custom transitions and bindings
       GetPage(
         name: '/login',
         page: () => Login(),
       ),
+      GetPage(
+        name: '/home',
+        page: () => Home(),
+      ),
+      // GetPage with custom transitions and bindings
+
       GetPage(
         name: '/GroupHome',
         page: () => GroupHome(),

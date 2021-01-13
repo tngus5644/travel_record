@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
 import 'package:travel_record/data/users/user_class.dart';
+import 'package:travel_record/ui/home/login_screen.dart';
 
-Widget homeProfileUserWidget() {
-  User user = new User();
+Widget homeProfileUserWidget(User user) {
+
   final sex = true.obs;
   return Column(
     children: [
