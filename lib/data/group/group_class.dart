@@ -5,7 +5,10 @@ part 'group_class.g.dart';
 ///flutter pub run build_runner build
 ///
 Group parseGroup(Map<String, dynamic> responseBody) {
+  print('parse start');
   Group group = Group.fromJson(responseBody);
+  print(group.introduce.toString());
+  print('parse finish');
   return group;
 }
 

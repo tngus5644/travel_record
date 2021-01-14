@@ -6,19 +6,61 @@ import 'package:get/get.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-
-import 'package:hive/hive.dart';
+import 'package:travel_record/ui/home/home_home_screen.dart';
 
 class Login extends StatelessWidget {
-
   TextEditingController emailController;
   TextEditingController pwController;
   FirebaseFirestore db = FirebaseFirestore.instance;
   FirebaseStorage fs = FirebaseStorage.instance;
 
-  User user = User();
+  User user;
   Group group = new Group();
   List<Group> groups = List();
+
+  Future<void> logIn() async {
+    DocumentSnapshot ds = await db.collection('users').doc('tngus5644').get();
+
+    user = parseUser(ds.data());
+
+    int index = 0;
+    user.belongGroup.forEach((e) async {
+      ds = await db.collection("group").doc(e).get();
+      print(ds.data().toString());
+      group = parseGroup(ds.data());
+
+      print(group.introduce.toString());
+      // print(group.introduce.toString());
+      groups.insert(index, group);
+      print(index);
+      // print(groups[index].introduce.toString());
+
+      index++;
+    });
+
+    Get.put(user);
+    Get.put(groups);
+    Get.offAllNamed('home');
+  }
+
+  // await db
+  //     .collection("users")
+  //     .doc("tngus5644")
+  //     .get()
+  //     .then((DocumentSnapshot ds)  {
+  //   user = parseUser(ds.data());
+  //   Get.put(user);
+  //   print(user.name.toString());
+  //   user.belongGroup.asMap().forEach((index, e) => db
+  //           .collection("group")
+  //           .doc(e.toString())
+  //           .get()
+  //           .then((DocumentSnapshot ds) async {
+  //         group = parseGroup(ds.data());
+  //         groups.add(group);
+  //         Get.put(groups);
+  //       }));
+  // });
 
   @override
   Widget build(BuildContext context) {
@@ -71,32 +113,7 @@ class Login extends StatelessWidget {
                     RaisedButton(
                       onPressed: () {
                         String email = 'tngus5644@gmail.com';
-                        db
-                            .collection("users")
-                            .doc("tngus5644")
-                            .get()
-                            .then((DocumentSnapshot ds) {
-                          print(ds.data().toString());
-                          user = parseUser(ds.data());
-                          Hive.box('userBox').put('user', user);
-                          print(user.name.toString());
-                          user.belongGroup.asMap().forEach((index, e) =>
-                              db
-                                  .collection("group")
-                                  .doc(e.toString())
-                                  .get()
-                                  .then((DocumentSnapshot ds) {
-                                    // print(ds.data().toString());
-                                    group = parseGroup(ds.data());
-                                    print(group.toString());
-                                    // print('group$index');
-                                    Hive.box('groupBox').put('group$index', group);
-                              }));
-
-                          // print(groups.toString());
-                        });
-
-                        Get.offAllNamed('/home');
+                        logIn();
                       },
                       child: Text('Login'),
                       color: Colors.blueAccent,
