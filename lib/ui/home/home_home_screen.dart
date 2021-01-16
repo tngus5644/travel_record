@@ -6,21 +6,14 @@ import 'package:travel_record/data/group/group_class.dart';
 import 'package:travel_record/data/users/user_class.dart';
 
 class HomeHome extends StatelessWidget {
-  // User user ;
-  // HomeHome({Key key, this.user}) : super(key:key);
-  User user ;
-  List<Group> groups ;
+  User user;
 
+  List<Group> groups;
 
-  void updateData(){
-    user = Get.find();
-    groups = Get.find();
-  }
+  HomeHome({Key key, this.user, this.groups}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    updateData();
-    print(groups.length);
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -31,39 +24,56 @@ class HomeHome extends StatelessWidget {
                   shrinkWrap: true,
                   itemCount: user.belongGroup.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 1, childAspectRatio: Get.width / Get.height * 3),
+                      crossAxisCount: 1,
+                      childAspectRatio: Get.width / Get.height * 3),
                   itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                            child: Text('그룹장 : '),
-                          ),
-                          SizedBox(height: 10),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Container(
-                                  width: Get.width / 2,
-                                  height: Get.width / 2,
-                                  child: Image.network(
-                                      'http://travel.chosun.com/site/data/img_dir/2017/06/30/2017063001239_0.jpg')),
-                              Spacer(),
-                              Column(
-                                children: [Text('송우리 여행자들의 모임'), Text('')],
-                              ),
-                              Spacer(),
-                            ],
-                          ),
-                        ],
+                    return GestureDetector(
+                      child: Container(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                                  child: Text('그룹장 : '),
+                                ),
+                                Text(groups[index].leader.toString()),
+                              ],
+                            ),
+                            SizedBox(height: 10),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Container(
+                                    width: Get.width / 2,
+                                    height: Get.width / 2,
+                                    child: Image.network(
+                                        'http://travel.chosun.com/site/data/img_dir/2017/06/30/2017063001239_0.jpg')),
+                                Spacer(),
+                                Column(
+                                  children: [
+                                    Text(groups[index].introduce.toString()),
+                                    Text('')
+                                  ],
+                                ),
+                                Spacer(),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
+                      onTap: () {
+                        Get.delete();
+                        Get.put(groups[index]);
+                        Get.put(user);
+                        Get.toNamed('/GroupHome',arguments: groups[index]);
+                      },
                     );
                   }),
               RaisedButton(
                   onPressed: () {
-// Get.toNamed('/makeGroup');
+Get.toNamed('/makeGroup');
                   },
                   child: Icon(Icons.add))
             ],

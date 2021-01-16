@@ -46,13 +46,13 @@ void main() async {
       ),
       GetPage(
         name: '/home',
-        page: () => HomeHome(),
+        page: () => Home(),
       ),
       // GetPage with custom transitions and bindings
 
       GetPage(
         name: '/GroupHome',
-        page: () => GroupHome(),
+        page: () => GroupHome(group : Get.arguments),
       ),
       GetPage(
         name: '/makeGroup',

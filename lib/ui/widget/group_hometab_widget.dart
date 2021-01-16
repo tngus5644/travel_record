@@ -4,8 +4,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
+import 'package:travel_record/data/group/group_class.dart';
+import 'package:travel_record/data/users/user_class.dart';
 
-Tab GroupHomeTab() {
+Tab GroupHomeTab(User user, Group group) {
+
+
   FirebaseFirestore db = FirebaseFirestore.instance;
 
   return Tab(
@@ -26,7 +30,7 @@ Tab GroupHomeTab() {
               children: [
                 Column(
                   children: [
-                    Text('송우리'),
+                    Text(group.name.toString()),
                     Text('Test'),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,

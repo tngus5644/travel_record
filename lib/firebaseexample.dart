@@ -14,7 +14,7 @@ class firebaseExample extends StatelessWidget {
             child: Text("create button", style: TextStyle(color: Colors.white)),
             onPressed: () {
               String book = "송우리";
-              db.collection('group').document(book).setData({'member': '윤수현', 'id': 1, 'mem_id': 'tngus5644'});
+              db.collection('group').doc(book).set({'member': '윤수현', 'id': 1, 'mem_id': 'tngus5644'});
               print(db.collection("users").doc('tngus5644').get().then((DocumentSnapshot ds){
                 print(ds.data()['id'].toString());
                 print(ds.data()['name'].toString()  );
@@ -38,7 +38,7 @@ class firebaseExample extends StatelessWidget {
             color: Colors.blue,
             child: Text("update button", style: TextStyle(color: Colors.white)),
             onPressed: () {
-              db.collection("group").doc("천년의_질문").updateData({"page":543});
+              // db.collection("group").doc("천년의_질문").updateData({"page":543});
 //클릭시 데이터를 갱신해준다.
             },
           ),
