@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
 
-part 'user_class.g.dart';
+// part 'user_class.g.dart';
 
 ///flutter pub run build_runner build
 
@@ -9,25 +9,25 @@ User parseUser(Map<String, dynamic> responseBody) {
   return user;
 }
 
-@HiveType(typeId: 0)
+// @HiveType(typeId: 0)
 class User extends HiveObject {
-  @HiveField(0)
+  // @HiveField(0)
   String email;
-  @HiveField(1)
+  // @HiveField(1)
   String name;
-  @HiveField(2)
+  // @HiveField(2)
   String address;
-  @HiveField(3)
+  // @HiveField(3)
   String age;
-  @HiveField(4)
+  // @HiveField(4)
   String loginType;
-  @HiveField(5)
+  // @HiveField(5)
   String sex;
-  @HiveField(6)
+  // @HiveField(6)
   List belongGroup;
-  @HiveField(7)
+  // @HiveField(7)
   String birthday;
-  @HiveField(8)
+  // @HiveField(8)
   String joinDate;
 
   User(

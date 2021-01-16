@@ -15,52 +15,28 @@ class Login extends StatelessWidget {
   FirebaseStorage fs = FirebaseStorage.instance;
 
   User user;
-  Group group = new Group();
-  List<Group> groups = List();
+  Group group = Group();
+  List<Group> groups =  [];
 
   Future<void> logIn() async {
     DocumentSnapshot ds = await db.collection('users').doc('tngus5644').get();
 
     user = parseUser(ds.data());
 
-    int index = 0;
-    user.belongGroup.forEach((e) async {
-      ds = await db.collection("group").doc(e).get();
-      print(ds.data().toString());
+    for(int i = 0 ; i<user.belongGroup.length; i++){
+      ds = await db.collection("group").doc(user.belongGroup[i]).get();
       group = parseGroup(ds.data());
+      groups.add(group);
+      print(groups.length);
+    }
 
-      print(group.introduce.toString());
-      // print(group.introduce.toString());
-      groups.insert(index, group);
-      print(index);
-      // print(groups[index].introduce.toString());
-
-      index++;
-    });
-
-    Get.put(user);
     Get.put(groups);
+    Get.put(user);
+
     Get.offAllNamed('home');
   }
 
-  // await db
-  //     .collection("users")
-  //     .doc("tngus5644")
-  //     .get()
-  //     .then((DocumentSnapshot ds)  {
-  //   user = parseUser(ds.data());
-  //   Get.put(user);
-  //   print(user.name.toString());
-  //   user.belongGroup.asMap().forEach((index, e) => db
-  //           .collection("group")
-  //           .doc(e.toString())
-  //           .get()
-  //           .then((DocumentSnapshot ds) async {
-  //         group = parseGroup(ds.data());
-  //         groups.add(group);
-  //         Get.put(groups);
-  //       }));
-  // });
+
 
   @override
   Widget build(BuildContext context) {

@@ -24,16 +24,15 @@ void main() async {
   await Firebase.initializeApp();
   final directory = await getApplicationDocumentsDirectory();
 
-  Hive
-    ..init(directory.path)
-    ..registerAdapter(UserAdapter())
-    ..registerAdapter(GroupAdapter())
-    ..initFlutter();
-
-  Hive.deleteBoxFromDisk('userBox');
-  Hive.deleteBoxFromDisk('groupBox');
-  await Hive.openBox('userBox');
-  await Hive.openBox('groupBox');
+  // Hive
+  //   ..init(directory.path)
+  //   ..registerAdapter(UserAdapter())
+  //   ..initFlutter();
+  //
+  // Hive.deleteBoxFromDisk('userBox');
+  // Hive.deleteBoxFromDisk('groupBox');
+  // await Hive.openBox('userBox');
+  // await Hive.openBox('groupBox');
 
   runApp(GetMaterialApp(
     // It is not mandatory to use named routes, but dynamic urls are interesting.

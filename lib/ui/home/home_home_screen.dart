@@ -8,13 +8,19 @@ import 'package:travel_record/data/users/user_class.dart';
 class HomeHome extends StatelessWidget {
   // User user ;
   // HomeHome({Key key, this.user}) : super(key:key);
-  User user = Get.find();
-  List<Group> groups = Get.find();
+  User user ;
+  List<Group> groups ;
 
 
+  void updateData(){
+    user = Get.find();
+    groups = Get.find();
+  }
 
   @override
   Widget build(BuildContext context) {
+    updateData();
+    print(groups.length);
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
