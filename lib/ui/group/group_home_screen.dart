@@ -5,7 +5,7 @@ import 'package:travel_record/data/users/user_class.dart';
 import 'package:travel_record/ui/widget/group_hometab_widget.dart';
 
 class GroupHome extends StatelessWidget {
-  User user = Get.find();
+  Users user = Get.find();
   Group group ;
 
   GroupHome({this.group});

@@ -6,7 +6,7 @@ import 'package:travel_record/data/group/group_class.dart';
 import 'package:travel_record/data/users/user_class.dart';
 
 class HomeHome extends StatelessWidget {
-  User user;
+  Users user;
 
   List<Group> groups;
 

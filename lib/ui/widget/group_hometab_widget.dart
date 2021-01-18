@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:travel_record/data/group/group_class.dart';
 import 'package:travel_record/data/users/user_class.dart';
 
-Tab GroupHomeTab(User user, Group group) {
+Tab GroupHomeTab(Users user, Group group) {
 
 
   FirebaseFirestore db = FirebaseFirestore.instance;

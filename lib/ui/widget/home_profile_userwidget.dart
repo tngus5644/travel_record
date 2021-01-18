@@ -4,7 +4,7 @@ import 'package:hive/hive.dart';
 import 'package:travel_record/data/users/user_class.dart';
 import 'package:travel_record/ui/home/login_screen.dart';
 
-Widget homeProfileUserWidget(User user) {
+Widget homeProfileUserWidget(Users user) {
 
   final sex = true.obs;
   return Column(

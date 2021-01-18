@@ -4,13 +4,13 @@ import 'package:hive/hive.dart';
 
 ///flutter pub run build_runner build
 
-User parseUser(Map<String, dynamic> responseBody) {
-  User user = User.fromJson(responseBody);
+Users parseUser(Map<String, dynamic> responseBody) {
+  Users user = Users.fromJson(responseBody);
   return user;
 }
 
 // @HiveType(typeId: 0)
-class User extends HiveObject {
+class Users extends HiveObject {
   // @HiveField(0)
   String email;
   // @HiveField(1)
@@ -30,7 +30,7 @@ class User extends HiveObject {
   // @HiveField(8)
   String joinDate;
 
-  User(
+  Users(
       {this.email,
       this.name,
       this.address,
@@ -41,8 +41,8 @@ class User extends HiveObject {
       this.birthday,
       this.joinDate});
 
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
+  factory Users.fromJson(Map<String, dynamic> json) {
+    return Users(
         email: json['id'] as String,
         name: json['name'] as String,
         address: json['address'] as String,

@@ -6,7 +6,7 @@ import 'package:hive/hive.dart';
 import 'package:travel_record/ui/widget/home_profile_socialwidget.dart';
 
 class HomeProfile extends StatelessWidget {
-  User user ;
+  Users user ;
 
   HomeProfile({Key key, this.user}) : super(key:key);
   @override
