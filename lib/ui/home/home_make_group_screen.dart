@@ -6,104 +6,201 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:travel_record/data/users/user_class.dart';
+import 'package:travel_record/ui/widget/friends_select_widget.dart';
 
 class HomeMakeGroup extends StatefulWidget {
+  Users users;
+
+  HomeMakeGroup({Key key, this.users}) : super(key: key);
+
   @override
   _HomeMakeGroupState createState() => _HomeMakeGroupState();
 }
 
 class _HomeMakeGroupState extends State<HomeMakeGroup> {
-  File _image;
-  FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  User _user;
-  FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
-  String _profileImageURL = "";
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _introduceController = TextEditingController();
+  final release = true.obs;
+  Users users;
 
   @override
   void initState() {
     super.initState();
-    _prepareService();
+    users = widget.users;
   }
 
-  void _prepareService() async {
-    // _user = await _firebaseAuth.currentUser();
-  }
+  Future<void> _getUsers() async {}
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Cloud Storage Demo")),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            // 업로드할 이미지를 출력할 CircleAvatar
-            CircleAvatar(
-              backgroundImage:
-              (_image != null) ? FileImage(_image) : NetworkImage(""),
-              radius: 30,
-            ),
-            // 업로드할 이미지를 선택할 이미지 피커 호출 버튼
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                RaisedButton(
-                  child: Text("Gallery"),
+        body: SafeArea(
+      child: Center(
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Text(
+            '새 여행 만들기',
+          ),
+          Row(
+            children: [
+              Text('여행 이름'),
+              SizedBox(width: 40),
+              Container(
+                child: TextField(
+                  controller: _nameController,
+                  autofocus: true,
+                  decoration: InputDecoration(
+                    hintText: '멋진 이름을 정해주세요 :D',
+                  ),
+                ),
+                width: Get.width * 2 / 3,
+              )
+            ],
+          ),
+          Row(
+            children: [
+              Text('여행 소개'),
+              SizedBox(width: 40),
+              Container(
+                child: TextField(
+                  controller: _introduceController,
+                  decoration: InputDecoration(
+                    hintText: '어떤 여행인지 간략히 소개해주세요.',
+                  ),
+                ),
+                width: Get.width * 2 / 3,
+              )
+            ],
+          ),
+          Row(
+            children: [
+              Text('공개 여부'),
+              SizedBox(width: 40),
+              Container(
+                child: Row(
+                  children: [
+                    Obx(
+                      () => RaisedButton(
+                          onPressed: () {
+                            release.value = true;
+                            print(release.value);
+                          },
+                          child: Text('공개'),
+                          color:
+                              release.value ? Colors.blueAccent : Colors.white),
+                    ),
+                    Obx(
+                      () => RaisedButton(
+                          onPressed: () {
+                            release.value = false;
+                            print(release);
+                          },
+                          child: Text('비공개'),
+                          color: !release.value
+                              ? Colors.blueAccent
+                              : Colors.white),
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
+          Row(
+            children: [
+              Text('멤버 초대'),
+              SizedBox(width: 40),
+              RaisedButton(
+                onPressed: () {
+                  _showDialog();
+                },
+                child: Icon(Icons.add),
+                color: Colors.blueAccent,
+              )
+            ],
+          ),
+        ],
+      )),
+    ));
+  }
+
+  void _showDialog() {
+    List<bool> friendCheck = [];
+    int i = 0;
+    while (i < users.friends.length) {
+      friendCheck.add(false);
+      i++;
+    }
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return AlertDialog(
+              title: Text("친구 초대"),
+              content: SingleChildScrollView(
+                  child: Container(
+                width: Get.width * 2 / 3,
+                height: Get.height,
+                child: ListView.builder(
+                    itemCount: users.friends.length,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        child: Row(children: [
+                          Checkbox(
+                            value: friendCheck[index],
+                            onChanged: (bool value) {
+                              setState(() {
+                                friendCheck[index] = value;
+                              });
+                            },
+                          ),
+                          Text(users.friends[index])
+                        ]),
+                      );
+                    }),
+              )),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text("Close"),
                   onPressed: () {
-                    _uploadImageToStorage(ImageSource.gallery);
+                    Navigator.pop(context);
                   },
                 ),
-                RaisedButton(
-                  child: Text("Camera"),
-                  onPressed: () {
-                    _uploadImageToStorage(ImageSource.camera);
-                  },
-                )
               ],
-            ),
-            Divider(
-              color: Colors.grey,
-            ),
-            // 업로드 된 이미지를 출력할 CircleAvatar
-            CircleAvatar(
-              backgroundImage: NetworkImage(_profileImageURL),
-              radius: 30,
-            ),
-            // 업로드 된 이미지의 URL
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(_profileImageURL),
-            )
-          ],
-        ),
-      ),
+            );
+          },
+        );
+      },
     );
   }
 
-  void _uploadImageToStorage(ImageSource source) async {
-    File image = await ImagePicker.pickImage(source: source);
-
-    if (image == null) return;
-    setState(() {
-      _image = image;
-    });
-
-    // 프로필 사진을 업로드할 경로와 파일명을 정의. 사용자의 uid를 이용하여 파일명의 중복 가능성 제거
-    // StorageReference storageReference =
-    // _firebaseStorage.ref().child("profile/${_user.uid}");
-    //
-    // // 파일 업로드
-    // StorageUploadTask storageUploadTask = storageReference.putFile(_image);
-
-    // 파일 업로드 완료까지 대기
-    // await storageUploadTask.onComplete;
-
-    // 업로드한 사진의 URL 획득
-    // String downloadURL = await storageReference.getDownloadURL();
-
-    // 업로드된 사진의 URL을 페이지에 반영
-    setState(() {
-      // _profileImageURL = downloadURL;
-    });
-  }
+// void _uploadImageToStorage(ImageSource source) async {
+//   File image = await ImagePicker.pickImage(source: source);
+//
+//   if (image == null) return;
+//   setState(() {
+//     _image = image;
+//   });
+//
+//   // // 프로필 사진을 업로드할 경로와 파일명을 정의. 사용자의 uid를 이용하여 파일명의 중복 가능성 제거
+//   // StorageReference storageReference =
+//   // _storage.ref().child("profile/${_user.uid}");
+//   //
+//   // // 파일 업로드
+//   // StorageUploadTask storageUploadTask = storageReference.putFile(_image);
+//   //
+//   // // 파일 업로드 완료까지 대기
+//   // await storageUploadTask.onComplete;
+//   //
+//   // // 업로드한 사진의 URL 획득
+//   // String downloadURL = await storageReference.getDownloadURL();
+//   //
+//   // // 업로드된 사진의 URL을 페이지에 반영
+//   // setState(() {
+//   //   // _profileImageURL = downloadURL;
+//   // });
+// }
 }

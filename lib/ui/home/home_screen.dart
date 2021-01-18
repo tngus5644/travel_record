@@ -12,7 +12,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _selectedIndex = 0;
-  List<Widget> _pages = [HomeHome(user:Get.find(), groups:Get.find()), Text('page2'), HomeProfile(user: Get.find())];
+  List<Widget> _pages = [HomeHome(users:Get.find(), groups:Get.find()), Text('page2'), HomeProfile(user: Get.find())];
   void _onItemTapped(int index) {
 
     setState(() {

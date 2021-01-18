@@ -6,14 +6,15 @@ import 'package:travel_record/data/group/group_class.dart';
 import 'package:travel_record/data/users/user_class.dart';
 
 class HomeHome extends StatelessWidget {
-  Users user;
+  Users users;
 
   List<Group> groups;
 
-  HomeHome({Key key, this.user, this.groups}) : super(key: key);
+  HomeHome({Key key, this.users, this.groups}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -22,7 +23,7 @@ class HomeHome extends StatelessWidget {
               GridView.builder(
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  itemCount: user.belongGroup.length,
+                  itemCount: users.belongGroup.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 1,
                       childAspectRatio: Get.width / Get.height * 3),
@@ -66,14 +67,15 @@ class HomeHome extends StatelessWidget {
                       onTap: () {
                         Get.delete();
                         Get.put(groups[index]);
-                        Get.put(user);
-                        Get.toNamed('/GroupHome',arguments: groups[index]);
+                        Get.put(users);
+                        Get.toNamed('/GroupHome', arguments: groups[index]);
                       },
                     );
                   }),
               RaisedButton(
                   onPressed: () {
-Get.toNamed('/makeGroup');
+
+                    Get.toNamed('/makeGroup', arguments: users);
                   },
                   child: Icon(Icons.add))
             ],

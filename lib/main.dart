@@ -56,7 +56,7 @@ void main() async {
       ),
       GetPage(
         name: '/makeGroup',
-        page: () => HomeMakeGroup(),
+        page: () => HomeMakeGroup(users : Get.arguments),
       ),
     ],
   ));

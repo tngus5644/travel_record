@@ -122,7 +122,8 @@ Widget homeProfileUserWidget(Users user) {
                       sex.value = false;
                     },
                     child: Text('여'),
-                    color: !sex.value ? Colors.blueAccent : Colors.white))
+                    color: !sex.value ? Colors.blueAccent : Colors.white)
+                )
               ],
             ),
           ),

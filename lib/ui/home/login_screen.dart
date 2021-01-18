@@ -16,38 +16,38 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  TextEditingController emailController;
-  TextEditingController pwController;
+  TextEditingController emailController = TextEditingController();
+  TextEditingController pwController = TextEditingController();
   FirebaseFirestore db = FirebaseFirestore.instance;
-  FirebaseStorage fs = FirebaseStorage.instance;
+  FirebaseStorage storage = FirebaseStorage.instance;
+  FirebaseAuth auth = FirebaseAuth.instance;
+
   bool doRemember = false;
 
-  Users user;
+  Users users;
   Group group = Group();
   List<Group> groups = [];
 
   Future<void> logIn() async {
     DocumentSnapshot ds = await db.collection('users').doc('tngus5644').get();
 
-    user = parseUser(ds.data());
-
-    for (int i = 0; i < user.belongGroup.length; i++) {
-      ds = await db.collection("group").doc(user.belongGroup[i]).get();
+    users = parseUser(ds.data());
+    for (int i = 0; i < users.belongGroup.length; i++) {
+      ds = await db.collection("group").doc(users.belongGroup[i]).get();
       group = parseGroup(ds.data());
       groups.add(group);
-      print(groups.length);
     }
 
     Get.put(groups);
-    Get.put(user);
+    Get.put(users);
 
-    print('firebase auth start');
-    print(emailController.value.toString());
-    print(emailController.text.toString());
-    print(pwController.text.toString());
     // FirebaseAuth.instance.createUserWithEmailAndPassword(email: emailController.text, password: pwController.text);
-    // FirebaseAuth.instance.signInWithEmailAndPassword(email: emailController.text, password: pwController.text);
-    // print(FirebaseAuth.instance.currentUser.emailVerified.toString());
+    auth.signInWithEmailAndPassword(
+        email: emailController.text, password: pwController.text);
+
+    print(auth.currentUser.uid.toString());
+    User user = auth.currentUser;
+    Get.put(user);
     Get.offAllNamed('home');
   }
 
@@ -100,13 +100,12 @@ class _LoginState extends State<Login> {
                 Text('password'),
                 SizedBox(height: 10),
                 Container(
-                    width:( Get.width - 40),
+                    width: (Get.width - 40),
                     child: TextField(
                       controller: pwController,
                       obscureText: true,
                       decoration: InputDecoration(border: OutlineInputBorder()),
                     )),
-
                 Row(
                   children: <Widget>[
                     Checkbox(
@@ -127,11 +126,9 @@ class _LoginState extends State<Login> {
                     ),
                     RaisedButton(
                       onPressed: () {
-
                         String email = 'tngus5644@gmail.com';
                         FocusScope.of(context).requestFocus(new FocusNode());
                         logIn();
-
                       },
                       child: Text('Login'),
                       color: Colors.blueAccent,
@@ -147,7 +144,6 @@ class _LoginState extends State<Login> {
   }
 
   getRememberInfo() async {
-    print(doRemember);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       doRemember = (prefs.getBool("doRemember") ?? false);
@@ -161,8 +157,6 @@ class _LoginState extends State<Login> {
   }
 
   setRememberInfo() async {
-    print(doRemember);
-
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool("doRemember", doRemember);
     if (doRemember) {
