@@ -36,96 +36,125 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(
-      child: Center(
+      child: SingleChildScrollView(
+        child: Center(
           child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Text(
-            '새 여행 만들기',
-          ),
-          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Text('여행 이름'),
-              SizedBox(width: 40),
-              Container(
-                child: TextField(
-                  controller: _nameController,
-                  autofocus: true,
-                  decoration: InputDecoration(
-                    hintText: '멋진 이름을 정해주세요 :D',
-                  ),
-                ),
-                width: Get.width * 2 / 3,
-              )
-            ],
-          ),
-          Row(
-            children: [
-              Text('여행 소개'),
-              SizedBox(width: 40),
-              Container(
-                child: TextField(
-                  controller: _introduceController,
-                  decoration: InputDecoration(
-                    hintText: '어떤 여행인지 간략히 소개해주세요.',
-                  ),
-                ),
-                width: Get.width * 2 / 3,
-              )
-            ],
-          ),
-          Row(
-            children: [
-              Text('공개 여부'),
-              SizedBox(width: 40),
-              Container(
-                child: Row(
-                  children: [
-                    Obx(
-                      () => RaisedButton(
-                          onPressed: () {
-                            release.value = true;
-                            print(release.value);
-                          },
-                          child: Text('공개'),
-                          color:
-                              release.value ? Colors.blueAccent : Colors.white),
+              Text(
+                '새 여행 만들기',
+              ),
+              Row(
+                children: [
+                  Text('여행 이름'),
+                  SizedBox(width: 40),
+                  Container(
+                    child: TextField(
+                      controller: _nameController,
+                      autofocus: true,
+                      decoration: InputDecoration(
+                        hintText: '멋진 이름을 정해주세요 :D',
+                      ),
                     ),
-                    Obx(
-                      () => RaisedButton(
-                          onPressed: () {
-                            release.value = false;
-                            print(release);
-                          },
-                          child: Text('비공개'),
-                          color: !release.value
-                              ? Colors.blueAccent
-                              : Colors.white),
-                    )
-                  ],
-                ),
+                    width: Get.width * 2 / 3,
+                  )
+                ],
+              ),
+              Row(
+                children: [
+                  Text('여행 소개'),
+                  SizedBox(width: 40),
+                  Container(
+                    child: TextField(
+                      controller: _introduceController,
+                      decoration: InputDecoration(
+                        hintText: '어떤 여행인지 간략히 소개해주세요.',
+                      ),
+                    ),
+                    width: Get.width * 2 / 3,
+                  )
+                ],
+              ),
+              Row(
+                children: [
+                  Text('공개 여부'),
+                  SizedBox(width: 40),
+                  Container(
+                    child: Row(
+                      children: [
+                        Obx(
+                          () => RaisedButton(
+                              onPressed: () {
+                                release.value = true;
+                                print(release.value);
+                              },
+                              child: Text('공개'),
+                              color: release.value
+                                  ? Colors.blueAccent
+                                  : Colors.white),
+                        ),
+                        Obx(
+                          () => RaisedButton(
+                              onPressed: () {
+                                release.value = false;
+                                print(release);
+                              },
+                              child: Text('비공개'),
+                              color: !release.value
+                                  ? Colors.blueAccent
+                                  : Colors.white),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+              Row(
+                children: [
+                  Text('멤버 초대'),
+                  SizedBox(width: 40),
+                  RaisedButton(
+                    onPressed: () {
+                      _selectFriends();
+                    },
+                    child: Icon(Icons.add),
+                    color: Colors.blueAccent,
+                  )
+                ],
+              ),
+              Wrap(
+                direction: Axis.horizontal,
+                children: [
+                  Container(
+                      width: Get.width *2/3,
+                      height: 200,
+                      child: _customListItem(context)),
+                  // Container(child: _myListView(context)),
+                ],
               )
             ],
           ),
-          Row(
-            children: [
-              Text('멤버 초대'),
-              SizedBox(width: 40),
-              RaisedButton(
-                onPressed: () {
-                  _showDialog();
-                },
-                child: Icon(Icons.add),
-                color: Colors.blueAccent,
-              )
-            ],
-          ),
-        ],
-      )),
+        ),
+      ),
     ));
   }
 
-  void _showDialog() {
+  Widget _customListItem(BuildContext context) {
+    return ListView.builder(
+      scrollDirection: Axis.horizontal,
+      itemCount: 20,
+      itemBuilder: (context, index) {
+        return Card(
+            child: Container(
+          color: Colors.blueAccent,
+          width: 40,
+          height: 50,
+        ));
+      },
+    );
+  }
+
+  void _selectFriends() {
     List<bool> friendCheck = [];
     int i = 0;
     while (i < users.friends.length) {
@@ -163,6 +192,12 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
                     }),
               )),
               actions: <Widget>[
+                FlatButton(
+                  child: Text("select"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
                 FlatButton(
                   child: Text("Close"),
                   onPressed: () {
