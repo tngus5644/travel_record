@@ -53,7 +53,7 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
                       controller: _nameController,
                       autofocus: true,
                       decoration: InputDecoration(
-                        hintText: '멋진 이름을 정해주세요 :D',
+                        hintText: '멋진 이름을 정해주세요 ',
                       ),
                     ),
                     width: Get.width * 2 / 3,
