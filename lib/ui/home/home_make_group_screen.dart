@@ -23,6 +23,8 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
   TextEditingController _introduceController = TextEditingController();
   final release = true.obs;
   Users users;
+  List _selectedFriends = [];
+
 
   @override
   void initState() {
@@ -115,19 +117,21 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
                   SizedBox(width: 40),
                   RaisedButton(
                     onPressed: () {
-                      _selectFriends();
+                      setState(() {
+                        _selectedFriends = _selectFriends();
+                      });
                     },
                     child: Icon(Icons.add),
                     color: Colors.blueAccent,
-                  )
+                  ),
                 ],
               ),
               Wrap(
                 direction: Axis.horizontal,
                 children: [
                   Container(
-                      width: Get.width *2/3,
-                      height: 200,
+                      width: Get.width,
+                      height: 50,
                       child: _customListItem(context)),
                   // Container(child: _myListView(context)),
                 ],
@@ -142,20 +146,21 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
   Widget _customListItem(BuildContext context) {
     return ListView.builder(
       scrollDirection: Axis.horizontal,
-      itemCount: 20,
+      itemCount: _selectedFriends.length,
       itemBuilder: (context, index) {
         return Card(
             child: Container(
           color: Colors.blueAccent,
-          width: 40,
+          width: 10,
           height: 50,
         ));
       },
     );
   }
 
-  void _selectFriends() {
+  List<String> _selectFriends() {
     List<bool> friendCheck = [];
+    List<String> _selectedFriends = [];
     int i = 0;
     while (i < users.friends.length) {
       friendCheck.add(false);
@@ -181,6 +186,9 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
                           Checkbox(
                             value: friendCheck[index],
                             onChanged: (bool value) {
+                              value
+                                  ? _selectedFriends.add(users.friends[index])
+                                  : _selectedFriends.removeAt(index);
                               setState(() {
                                 friendCheck[index] = value;
                               });
@@ -196,6 +204,7 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
                   child: Text("select"),
                   onPressed: () {
                     Navigator.pop(context);
+
                   },
                 ),
                 FlatButton(
@@ -210,6 +219,7 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
         );
       },
     );
+    return _selectedFriends;
   }
 
 // void _uploadImageToStorage(ImageSource source) async {
