@@ -25,24 +25,59 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
   Users users;
   List<String> _selectedFriends = [];
 
+  final imgPicker = ImagePicker();
+  File _image;
   @override
   void initState() {
     super.initState();
     users = widget.users;
   }
 
-  File _image;
 
   getGalleryImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    var image = await imgPicker.getImage(source: ImageSource.gallery);
     setState(() {
-      _image = image;
+      _image = File(image.path);
     });
+    Navigator.of(context).pop();
   }
 
   getCameraImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.camera);
-    _image = image;
+    var image = await imgPicker.getImage(source: ImageSource.camera);
+    setState(() {
+      _image = File(image.path);
+    });
+
+    Navigator.of(context).pop();
+  }
+
+  Future<void> showOptionsDialog(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Options"),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: [
+                  GestureDetector(
+                    child: Text("카메라로 사진 찍기"),
+                    onTap: () {
+                      getCameraImage();
+                    },
+                  ),
+                  Padding(padding: EdgeInsets.all(10)),
+                  GestureDetector(
+                    child: Text("갤러리에서 가져오기"),
+                    onTap: () {
+                      getGalleryImage();
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
   }
 
   @override
@@ -72,6 +107,7 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
                 )
               ],
             ),
+            SizedBox(height : 20),
             Row(
               children: [
                 Text('여행 소개'),
@@ -87,6 +123,7 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
                 )
               ],
             ),
+            SizedBox(height : 20),
             Row(
               children: [
                 Text('공개 여부'),
@@ -121,6 +158,7 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
                 )
               ],
             ),
+            SizedBox(height : 20),
             Row(
               children: [
                 Text('멤버 초대'),
@@ -138,6 +176,7 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
                 ),
               ],
             ),
+            SizedBox(height : 20),
             Wrap(
               direction: Axis.horizontal,
               children: [
@@ -148,17 +187,32 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
                 // Container(child: _myListView(context)),
               ],
             ),
-            Center(child : Text('대표 사진 등록')),
-            SizedBox(height : 20),
+            Center(child: Text('대표 사진 등록')),
+            SizedBox(height: 20),
             Center(
-                child: Container(
-              width: Get.width / 2,
-              height: Get.width / 2,
-              color: Colors.blueAccent,
+                child: Column(
+              children: [
+                GestureDetector(
+                  child: Container(
+                    width: Get.width / 2,
+                    height: Get.width / 2,
+                    decoration: BoxDecoration(
+                        border: Border.all(width: 1.0)),
+                    child: _image.isNull
+                        ? Icon(Icons.photo)
+                        : Image.file(_image,
+                            width: Get.width / 2, height: Get.width / 2),
+                  ),
+                  onTap: () {
+                    showOptionsDialog(context);
+                  },
+                ),
+              ],
             )),
-
+            SizedBox(height : 20),
             RaisedButton(
               onPressed: () {
+
                 Get.toNamed('makeGroup/image');
               },
               child: Text('완료'),

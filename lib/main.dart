@@ -2,7 +2,7 @@ import 'package:travel_record/data/group/group_class.dart';
 import 'package:travel_record/data/users/user_class.dart';
 import 'package:travel_record/ui/group/group_home_screen.dart';
 import 'package:travel_record/ui/home/home_home_screen.dart';
-import 'package:travel_record/ui/home/home_make_group_image_screen.dart';
+
 import 'package:travel_record/ui/home/home_make_group_screen.dart';
 import 'package:travel_record/ui/home/home_screen.dart';
 import 'package:travel_record/ui/home/login_screen.dart';
@@ -59,10 +59,7 @@ void main() async {
         name: '/makeGroup',
         page: () => HomeMakeGroup(users : Get.arguments),
       ),
-      GetPage(
-        name: '/makeGroup/image',
-        page: () => HomeMakeGroupImage(),
-      ),
+
     ],
   ));
 }
