@@ -24,7 +24,8 @@ class _LoginState extends State<Login> {
 
   bool doRemember = false;
 
-  Users users;
+
+  Users users; ///travel_record의 user
   Group group = Group();
   List<Group> groups = [];
 
@@ -42,13 +43,17 @@ class _LoginState extends State<Login> {
     Get.put(users);
 
     // FirebaseAuth.instance.createUserWithEmailAndPassword(email: emailController.text, password: pwController.text);
-    auth.signInWithEmailAndPassword(
-        email: emailController.text, password: pwController.text);
 
-    print(auth.currentUser.uid.toString());
-    User user = auth.currentUser;
-    Get.put(user);
-    Get.offAllNamed('home');
+    try {
+      final user = await auth.signInWithEmailAndPassword(
+          email: emailController.text, password: pwController.text);
+      user.user.isBlank? Get.snackbar('test', ' message') : Get.put(user);
+      Get.offAllNamed('home');
+    } catch (e) {
+      Get.snackbar('title', e.toString());
+    }
+
+
   }
 
   @override

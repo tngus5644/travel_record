@@ -23,8 +23,7 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
   TextEditingController _introduceController = TextEditingController();
   final release = true.obs;
   Users users;
-  List _selectedFriends = [];
-
+  List<String> _selectedFriends = [];
 
   @override
   void initState() {
@@ -32,112 +31,140 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
     users = widget.users;
   }
 
-  Future<void> _getUsers() async {}
+  File _image;
+
+  getGalleryImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      _image = image;
+    });
+  }
+
+  getCameraImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.camera);
+    _image = image;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(
       child: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Text(
-                '새 여행 만들기',
-              ),
-              Row(
-                children: [
-                  Text('여행 이름'),
-                  SizedBox(width: 40),
-                  Container(
-                    child: TextField(
-                      controller: _nameController,
-                      autofocus: true,
-                      decoration: InputDecoration(
-                        hintText: '멋진 이름을 정해주세요 ',
-                      ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Text(
+              '새 여행 만들기',
+            ),
+            Row(
+              children: [
+                Text('여행 이름'),
+                SizedBox(width: 40),
+                Container(
+                  child: TextField(
+                    controller: _nameController,
+                    autofocus: true,
+                    decoration: InputDecoration(
+                      hintText: '멋진 이름을 정해주세요 ',
                     ),
-                    width: Get.width * 2 / 3,
-                  )
-                ],
-              ),
-              Row(
-                children: [
-                  Text('여행 소개'),
-                  SizedBox(width: 40),
-                  Container(
-                    child: TextField(
-                      controller: _introduceController,
-                      decoration: InputDecoration(
-                        hintText: '어떤 여행인지 간략히 소개해주세요.',
-                      ),
-                    ),
-                    width: Get.width * 2 / 3,
-                  )
-                ],
-              ),
-              Row(
-                children: [
-                  Text('공개 여부'),
-                  SizedBox(width: 40),
-                  Container(
-                    child: Row(
-                      children: [
-                        Obx(
-                          () => RaisedButton(
-                              onPressed: () {
-                                release.value = true;
-                                print(release.value);
-                              },
-                              child: Text('공개'),
-                              color: release.value
-                                  ? Colors.blueAccent
-                                  : Colors.white),
-                        ),
-                        Obx(
-                          () => RaisedButton(
-                              onPressed: () {
-                                release.value = false;
-                                print(release);
-                              },
-                              child: Text('비공개'),
-                              color: !release.value
-                                  ? Colors.blueAccent
-                                  : Colors.white),
-                        )
-                      ],
-                    ),
-                  )
-                ],
-              ),
-              Row(
-                children: [
-                  Text('멤버 초대'),
-                  SizedBox(width: 40),
-                  RaisedButton(
-                    onPressed: () {
-                      setState(() {
-                        _selectedFriends = _selectFriends();
-                      });
-                    },
-                    child: Icon(Icons.add),
-                    color: Colors.blueAccent,
                   ),
-                ],
-              ),
-              Wrap(
-                direction: Axis.horizontal,
-                children: [
-                  Container(
-                      width: Get.width,
-                      height: 50,
-                      child: _customListItem(context)),
-                  // Container(child: _myListView(context)),
-                ],
-              )
-            ],
-          ),
+                  width: Get.width * 2 / 3,
+                )
+              ],
+            ),
+            Row(
+              children: [
+                Text('여행 소개'),
+                SizedBox(width: 40),
+                Container(
+                  child: TextField(
+                    controller: _introduceController,
+                    decoration: InputDecoration(
+                      hintText: '어떤 여행인지 간략히 소개해주세요.',
+                    ),
+                  ),
+                  width: Get.width * 2 / 3,
+                )
+              ],
+            ),
+            Row(
+              children: [
+                Text('공개 여부'),
+                SizedBox(width: 40),
+                Container(
+                  child: Row(
+                    children: [
+                      Obx(
+                        () => RaisedButton(
+                            onPressed: () {
+                              release.value = true;
+                              print(release.value);
+                            },
+                            child: Text('공개'),
+                            color: release.value
+                                ? Colors.blueAccent
+                                : Colors.white),
+                      ),
+                      Obx(
+                        () => RaisedButton(
+                            onPressed: () {
+                              release.value = false;
+                              print(release);
+                            },
+                            child: Text('비공개'),
+                            color: !release.value
+                                ? Colors.blueAccent
+                                : Colors.white),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+            Row(
+              children: [
+                Text('멤버 초대'),
+                SizedBox(width: 40),
+                RaisedButton(
+                  onPressed: () async {
+                    await selectFriends(context, users);
+                    _selectedFriends += Get.find();
+                    _selectedFriends = _selectedFriends.toSet().toList();
+                    print(_selectedFriends);
+                    setState(() {});
+                  },
+                  child: Icon(Icons.add),
+                  color: Colors.blueAccent,
+                ),
+              ],
+            ),
+            Wrap(
+              direction: Axis.horizontal,
+              children: [
+                Container(
+                    width: Get.width,
+                    height: 50,
+                    child: _customListItem(context)),
+                // Container(child: _myListView(context)),
+              ],
+            ),
+            Center(child : Text('대표 사진 등록')),
+            SizedBox(height : 20),
+            Center(
+                child: Container(
+              width: Get.width / 2,
+              height: Get.width / 2,
+              color: Colors.blueAccent,
+            )),
+
+            RaisedButton(
+              onPressed: () {
+                Get.toNamed('makeGroup/image');
+              },
+              child: Text('완료'),
+              color: Colors.blueAccent,
+            )
+          ],
         ),
       ),
     ));
@@ -148,78 +175,22 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
       scrollDirection: Axis.horizontal,
       itemCount: _selectedFriends.length,
       itemBuilder: (context, index) {
-        return Card(
-            child: Container(
-          color: Colors.blueAccent,
-          width: 10,
-          height: 50,
-        ));
-      },
-    );
-  }
-
-  List<String> _selectFriends() {
-    List<bool> friendCheck = [];
-    List<String> _selectedFriends = [];
-    int i = 0;
-    while (i < users.friends.length) {
-      friendCheck.add(false);
-      i++;
-    }
-
-    showDialog(
-      context: context,
-      builder: (context) {
-        return StatefulBuilder(
-          builder: (BuildContext context, StateSetter setState) {
-            return AlertDialog(
-              title: Text("친구 초대"),
-              content: SingleChildScrollView(
-                  child: Container(
-                width: Get.width * 2 / 3,
-                height: Get.height,
-                child: ListView.builder(
-                    itemCount: users.friends.length,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        child: Row(children: [
-                          Checkbox(
-                            value: friendCheck[index],
-                            onChanged: (bool value) {
-                              value
-                                  ? _selectedFriends.add(users.friends[index])
-                                  : _selectedFriends.removeAt(index);
-                              setState(() {
-                                friendCheck[index] = value;
-                              });
-                            },
-                          ),
-                          Text(users.friends[index])
-                        ]),
-                      );
-                    }),
-              )),
-              actions: <Widget>[
-                FlatButton(
-                  child: Text("select"),
-                  onPressed: () {
-                    Navigator.pop(context);
-
-                  },
-                ),
-                FlatButton(
-                  child: Text("Close"),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-              ],
-            );
+        return GestureDetector(
+          child: Card(
+              child: Container(
+            color: Colors.blueAccent,
+            width: 50,
+            height: 50,
+            child: Text(_selectedFriends[index]),
+          )),
+          onTap: () {
+            setState(() {
+              _selectedFriends.removeAt(index);
+            });
           },
         );
       },
     );
-    return _selectedFriends;
   }
 
 // void _uploadImageToStorage(ImageSource source) async {
