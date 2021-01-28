@@ -1,11 +1,14 @@
+
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:intl/intl.dart';
 import 'package:travel_record/data/users/user_class.dart';
 import 'package:travel_record/ui/widget/friends_select_widget.dart';
 
@@ -19,20 +22,23 @@ class HomeMakeGroup extends StatefulWidget {
 }
 
 class _HomeMakeGroupState extends State<HomeMakeGroup> {
+  FirebaseStorage _storage = FirebaseStorage.instance;
   TextEditingController _nameController = TextEditingController();
   TextEditingController _introduceController = TextEditingController();
-  final release = true.obs;
+  bool release = true;
   Users users;
   List<String> _selectedFriends = [];
 
   final imgPicker = ImagePicker();
   File _image;
+
+  bool checked = false;
+
   @override
   void initState() {
     super.initState();
     users = widget.users;
   }
-
 
   getGalleryImage() async {
     var image = await imgPicker.getImage(source: ImageSource.gallery);
@@ -49,6 +55,47 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
     });
 
     Navigator.of(context).pop();
+  }
+
+  checkTextField() {
+    (_nameController.text.isBlank || _introduceController.text.isBlank)
+        ? Get.snackbar('경고', '이름, 소개를 모두 채워주세요')
+        : checked = true;
+    print(checked);
+  }
+
+  makeGroupComplete() async {
+    FirebaseFirestore db = FirebaseFirestore.instance;
+
+    final date = DateFormat('yyyyMMdd').format(DateTime.now());
+
+    String docID= db.collection("group").doc().id.toString();
+    await db.collection('group').doc(docID).set({            /// group doc에 현재 그룹 추가.
+      'create_at': date,
+      'introduce': _introduceController.text,
+      'leader': users.name,
+      'allowOpen': release,
+      'name': _nameController.text,
+      'member': users.name
+    });
+print(docID);
+
+    List belongGroup = [];
+    db.collection('users').doc('tngus5644').get().then((DocumentSnapshot ds) {      ///user doc의 belong_group 에 현재 그룹 추가.
+      belongGroup = ds.data()['belong_group'];
+      belongGroup.add(_nameController.text);
+
+      db
+          .collection('users')
+          .doc('tngus5644')
+          .update({'belong_group': belongGroup});
+    });
+
+    // ignore: unnecessary_statements
+    _image !=null? await _storage.ref().child('group/$docID/main').putFile(_image) : null;    ///Image를 Storage의 docID에 저장.
+
+
+
   }
 
   Future<void> showOptionsDialog(BuildContext context) {
@@ -107,7 +154,7 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
                 )
               ],
             ),
-            SizedBox(height : 20),
+            SizedBox(height: 20),
             Row(
               children: [
                 Text('여행 소개'),
@@ -123,7 +170,7 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
                 )
               ],
             ),
-            SizedBox(height : 20),
+            SizedBox(height: 20),
             Row(
               children: [
                 Text('공개 여부'),
@@ -131,34 +178,31 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
                 Container(
                   child: Row(
                     children: [
-                      Obx(
-                        () => RaisedButton(
-                            onPressed: () {
-                              release.value = true;
-                              print(release.value);
-                            },
-                            child: Text('공개'),
-                            color: release.value
-                                ? Colors.blueAccent
-                                : Colors.white),
-                      ),
-                      Obx(
-                        () => RaisedButton(
-                            onPressed: () {
-                              release.value = false;
-                              print(release);
-                            },
-                            child: Text('비공개'),
-                            color: !release.value
-                                ? Colors.blueAccent
-                                : Colors.white),
-                      )
+                      RaisedButton(
+                          onPressed: () {
+                            setState(() {
+                              release = true;
+                            });
+
+                            print(release);
+                          },
+                          child: Text('공개'),
+                          color: release ? Colors.blueAccent : Colors.white),
+                      RaisedButton(
+                          onPressed: () {
+                            setState(() {
+                              release = false;
+                            });
+                            print(release);
+                          },
+                          child: Text('비공개'),
+                          color: !release ? Colors.blueAccent : Colors.white),
                     ],
                   ),
                 )
               ],
             ),
-            SizedBox(height : 20),
+            SizedBox(height: 20),
             Row(
               children: [
                 Text('멤버 초대'),
@@ -176,7 +220,7 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
                 ),
               ],
             ),
-            SizedBox(height : 20),
+            SizedBox(height: 20),
             Wrap(
               direction: Axis.horizontal,
               children: [
@@ -196,8 +240,7 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
                   child: Container(
                     width: Get.width / 2,
                     height: Get.width / 2,
-                    decoration: BoxDecoration(
-                        border: Border.all(width: 1.0)),
+                    decoration: BoxDecoration(border: Border.all(width: 1.0)),
                     child: _image.isNull
                         ? Icon(Icons.photo)
                         : Image.file(_image,
@@ -209,11 +252,15 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
                 ),
               ],
             )),
-            SizedBox(height : 20),
+            SizedBox(height: 20),
             RaisedButton(
-              onPressed: () {
+              onPressed: () async {
+                await checkTextField();
 
-                Get.toNamed('makeGroup/image');
+                // ignore: unnecessary_statements
+                checked ? await makeGroupComplete() : null;
+
+                // Get.toNamed('makeGroup/home');
               },
               child: Text('완료'),
               color: Colors.blueAccent,

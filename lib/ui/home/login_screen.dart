@@ -33,6 +33,7 @@ class _LoginState extends State<Login> {
     DocumentSnapshot ds = await db.collection('users').doc('tngus5644').get();
 
     users = parseUser(ds.data());
+
     for (int i = 0; i < users.belongGroup.length; i++) {
       ds = await db.collection("group").doc(users.belongGroup[i]).get();
       group = parseGroup(ds.data());
