@@ -50,6 +50,10 @@ void main() async {
         page: () => Home(),
       ),
       // GetPage with custom transitions and bindings
+      GetPage(
+        name: '/homeHome',
+        page: () => HomeHome(users: Get.find(),groups: Get.find()),
+      ),
 
       GetPage(
         name: '/GroupHome',

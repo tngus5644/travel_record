@@ -9,7 +9,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:travel_record/data/group/getGroupFromFirebase.dart';
+import 'package:travel_record/data/group/group_class.dart';
 import 'package:travel_record/data/users/user_class.dart';
+import 'package:travel_record/ui/home/home_home_screen.dart';
 import 'package:travel_record/ui/widget/friends_select_widget.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
@@ -23,17 +26,21 @@ class HomeMakeGroup extends StatefulWidget {
 }
 
 class _HomeMakeGroupState extends State<HomeMakeGroup> {
+  FirebaseFirestore db = FirebaseFirestore.instance;
   FirebaseStorage _storage = FirebaseStorage.instance;
   TextEditingController _nameController = TextEditingController();
   TextEditingController _introduceController = TextEditingController();
   bool release = true;
+  bool checked = false;
+
   Users users;
+
+  List belongGroup = [];
+  List<Group> groups;
   List<String> _selectedFriends = [];
 
   final imgPicker = ImagePicker();
   File _image;
-
-  bool checked = false;
 
   @override
   void initState() {
@@ -59,6 +66,7 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
     Navigator.of(context).pop();
   }
 
+  ///Assets의 Image를 File로 저장.
   Future<File> getImageFileFromAssets(String path) async {
     final byteData = await rootBundle.load('assets/$path');
     // final file = File('${(await getTemporaryDirectory()).path}/$path');
@@ -78,23 +86,22 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
   }
 
   makeGroupComplete() async {
-    FirebaseFirestore db = FirebaseFirestore.instance;
-
     final date = DateFormat('yyyyMMdd').format(DateTime.now());
-String docID;
+    String docID;
+
+    ///group컬렉션의 documentID는 auto create 하고 입력한 필드 생성.
     await db.collection('group').add({
       'create_at': date,
       'introduce': _introduceController.text,
       'leader': users.name,
       'allowOpen': release,
       'name': _nameController.text,
-      'member': users.name
+      'member': [users.name]
     }).then((value) => docID = value.id);
 
 
-    List belongGroup = [];
+    ///user doc의 belong_group 에 현재 그룹 추가.
     db.collection('users').doc('tngus5644').get().then((DocumentSnapshot ds) {
-      ///user doc의 belong_group 에 현재 그룹 추가.
       belongGroup = ds.data()['belong_group'];
       belongGroup.add(docID);
 
@@ -105,11 +112,15 @@ String docID;
     });
 
     // ignore: unnecessary_statements
-print(docID);
+    ///Image를 Storage의 docID에 저장.
     await _storage.ref().child('group/$docID/main').putFile(_image);
 
-    ///Image를 Storage의 docID에 저장.
+    users.belongGroup.add(docID);
+    groups = await getGroupFromFirebase(users);
+
+    Get.to(HomeHome(users:  users, groups : groups));
   }
+
 
   Future<void> showOptionsDialog(BuildContext context) {
     return showDialog(
@@ -269,9 +280,7 @@ print(docID);
             RaisedButton(
               onPressed: () async {
                 await checkInputFields();
-
-                // ignore: unnecessary_statements
-                checked ? await makeGroupComplete() : null;
+                if (checked) await makeGroupComplete();
 
                 // Get.toNamed('makeGroup/home');
               },

@@ -1,20 +1,35 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:travel_record/data/group/group_class.dart';
 import 'package:travel_record/data/users/user_class.dart';
 
-class HomeHome extends StatelessWidget {
+class HomeHome extends StatefulWidget {
   Users users;
-
   List<Group> groups;
 
   HomeHome({Key key, this.users, this.groups}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  _HomeHomeState createState() => _HomeHomeState();
+}
 
+class _HomeHomeState extends State<HomeHome> {
+  FirebaseStorage _storage = FirebaseStorage.instance;
+  Users users;
+  List<Group> groups;
+
+  @override
+  void initState() {
+    super.initState();
+    users = widget.users;
+    groups = widget.groups;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -49,8 +64,7 @@ class HomeHome extends StatelessWidget {
                                 Container(
                                     width: Get.width / 2,
                                     height: Get.width / 2,
-                                    child: Image.network(
-                                        'http://travel.chosun.com/site/data/img_dir/2017/06/30/2017063001239_0.jpg')),
+                                    child: Image.network('')),
                                 Spacer(),
                                 Column(
                                   children: [
@@ -74,7 +88,6 @@ class HomeHome extends StatelessWidget {
                   }),
               RaisedButton(
                   onPressed: () {
-
                     Get.toNamed('/makeGroup', arguments: users);
                   },
                   child: Icon(Icons.add))
