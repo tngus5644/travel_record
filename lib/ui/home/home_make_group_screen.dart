@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,8 +8,10 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:travel_record/data/users/user_class.dart';
 import 'package:travel_record/ui/widget/friends_select_widget.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 class HomeMakeGroup extends StatefulWidget {
   Users users;
@@ -37,6 +38,7 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
   @override
   void initState() {
     super.initState();
+
     users = widget.users;
   }
 
@@ -57,33 +59,44 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
     Navigator.of(context).pop();
   }
 
-  checkTextField() {
+  Future<File> getImageFileFromAssets(String path) async {
+    final byteData = await rootBundle.load('assets/$path');
+    // final file = File('${(await getTemporaryDirectory()).path}/$path');
+    final file =
+        File('${(await getTemporaryDirectory()).path}/group_main_basic.jpg');
+    await file.writeAsBytes(byteData.buffer
+        .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
+    return file;
+  }
+
+  checkInputFields() async {
     (_nameController.text.isBlank || _introduceController.text.isBlank)
         ? Get.snackbar('경고', '이름, 소개를 모두 채워주세요')
         : checked = true;
-    print(checked);
+    if (_image == null)
+      _image = await getImageFileFromAssets('group/group_main_basic.jpg');
   }
 
   makeGroupComplete() async {
     FirebaseFirestore db = FirebaseFirestore.instance;
 
     final date = DateFormat('yyyyMMdd').format(DateTime.now());
-
-    String docID= db.collection("group").doc().id.toString();
-    await db.collection('group').doc(docID).set({            /// group doc에 현재 그룹 추가.
+String docID;
+    await db.collection('group').add({
       'create_at': date,
       'introduce': _introduceController.text,
       'leader': users.name,
       'allowOpen': release,
       'name': _nameController.text,
       'member': users.name
-    });
-print(docID);
+    }).then((value) => docID = value.id);
+
 
     List belongGroup = [];
-    db.collection('users').doc('tngus5644').get().then((DocumentSnapshot ds) {      ///user doc의 belong_group 에 현재 그룹 추가.
+    db.collection('users').doc('tngus5644').get().then((DocumentSnapshot ds) {
+      ///user doc의 belong_group 에 현재 그룹 추가.
       belongGroup = ds.data()['belong_group'];
-      belongGroup.add(_nameController.text);
+      belongGroup.add(docID);
 
       db
           .collection('users')
@@ -92,10 +105,10 @@ print(docID);
     });
 
     // ignore: unnecessary_statements
-    _image !=null? await _storage.ref().child('group/$docID/main').putFile(_image) : null;    ///Image를 Storage의 docID에 저장.
+print(docID);
+    await _storage.ref().child('group/$docID/main').putFile(_image);
 
-
-
+    ///Image를 Storage의 docID에 저장.
   }
 
   Future<void> showOptionsDialog(BuildContext context) {
@@ -255,7 +268,7 @@ print(docID);
             SizedBox(height: 20),
             RaisedButton(
               onPressed: () async {
-                await checkTextField();
+                await checkInputFields();
 
                 // ignore: unnecessary_statements
                 checked ? await makeGroupComplete() : null;
