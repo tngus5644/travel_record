@@ -20,12 +20,25 @@ class _HomeHomeState extends State<HomeHome> {
   FirebaseStorage _storage = FirebaseStorage.instance;
   Users users;
   List<Group> groups;
+  String url;
 
   @override
-  void initState() {
+  initState() {
     super.initState();
     users = widget.users;
     groups = widget.groups;
+    url =
+        'https://firebasestorage.googleapis.com/v0/b/travel-record-93fbe.appspot.com/o/group%2F%EC%86%A1%EC%9A%B0%EB%A6%AC%2Fmain.jpg?alt=media&token=c3ac8b22-da5a-4ac2-bbd1-795f7591d8c0';
+  }
+
+  getImageUrl() async {
+    url = await _storage
+        .ref()
+        .child('group')
+        .child('송우리')
+        .child('main.jpg')
+        .getDownloadURL();
+    print(url);
   }
 
   @override
@@ -64,7 +77,7 @@ class _HomeHomeState extends State<HomeHome> {
                                 Container(
                                     width: Get.width / 2,
                                     height: Get.width / 2,
-                                    child: Image.network('')),
+                                    child: Image.asset('assets/group/group_main_basic.jpg')),
                                 Spacer(),
                                 Column(
                                   children: [

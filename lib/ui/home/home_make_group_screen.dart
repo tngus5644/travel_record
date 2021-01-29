@@ -9,7 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:travel_record/data/group/getGroupFromFirebase.dart';
+import 'package:travel_record/data/group/get_group_from_firebase.dart';
 import 'package:travel_record/data/group/group_class.dart';
 import 'package:travel_record/data/users/user_class.dart';
 import 'package:travel_record/ui/home/home_home_screen.dart';
@@ -41,6 +41,8 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
 
   final imgPicker = ImagePicker();
   File _image;
+
+  String url;
 
   @override
   void initState() {
@@ -77,6 +79,7 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
     return file;
   }
 
+  ///입력한 field들이 채워졌는지 확인하고 Image가 비어있으면 기본이미지 생성.
   checkInputFields() async {
     (_nameController.text.isBlank || _introduceController.text.isBlank)
         ? Get.snackbar('경고', '이름, 소개를 모두 채워주세요')
@@ -99,7 +102,6 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
       'member': [users.name]
     }).then((value) => docID = value.id);
 
-
     ///user doc의 belong_group 에 현재 그룹 추가.
     db.collection('users').doc('tngus5644').get().then((DocumentSnapshot ds) {
       belongGroup = ds.data()['belong_group'];
@@ -111,16 +113,25 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
           .update({'belong_group': belongGroup});
     });
 
-    // ignore: unnecessary_statements
-    ///Image를 Storage의 docID에 저장.
-    await _storage.ref().child('group/$docID/main').putFile(_image);
+    ///Image를 Storage의 docID에 저장하고 url에 downloadUrl 저장.
+    Reference ref = _storage.ref().child('group/$docID/main');
+    UploadTask uploadTask = ref.putFile(_image);
+    uploadTask.whenComplete(() async {
+      url = await ref.getDownloadURL();
+      print('url : $url');
+    }).catchError((onError) {
+      print(onError);
+    });
+
 
     users.belongGroup.add(docID);
     groups = await getGroupFromFirebase(users);
 
-    Get.to(HomeHome(users:  users, groups : groups));
+    Get.put(users);
+    Get.put(groups);
+    // Get.to(HomeHome(users:  users, groups : groups));
+    Get.offAllNamed('home');
   }
-
 
   Future<void> showOptionsDialog(BuildContext context) {
     return showDialog(
