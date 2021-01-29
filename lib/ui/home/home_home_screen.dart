@@ -28,7 +28,7 @@ class _HomeHomeState extends State<HomeHome> {
     users = widget.users;
     groups = widget.groups;
     url =
-        'https://firebasestorage.googleapis.com/v0/b/travel-record-93fbe.appspot.com/o/group%2F%EC%86%A1%EC%9A%B0%EB%A6%AC%2Fmain.jpg?alt=media&token=c3ac8b22-da5a-4ac2-bbd1-795f7591d8c0';
+        'https://firebasestorage.googleapis.com/v0/b/travel-record-93fbe.appspot.com/o/group%2F9SMCZKNmvyqhwlZAg0Ug%2Fmain?alt=media&token=481fd200-e4ef-4110-b992-edf36cb15c3c';
   }
 
   getImageUrl() async {
@@ -77,7 +77,7 @@ class _HomeHomeState extends State<HomeHome> {
                                 Container(
                                     width: Get.width / 2,
                                     height: Get.width / 2,
-                                    child: Image.asset('assets/group/group_main_basic.jpg')),
+                                    child: Image.network(url)),
                                 Spacer(),
                                 Column(
                                   children: [

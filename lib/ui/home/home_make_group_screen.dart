@@ -93,7 +93,7 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
     String docID;
 
     ///group컬렉션의 documentID는 auto create 하고 입력한 필드 생성.
-    await db.collection('group').add({
+     await db.collection('group').add({
       'create_at': date,
       'introduce': _introduceController.text,
       'leader': users.name,
@@ -119,6 +119,9 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
     uploadTask.whenComplete(() async {
       url = await ref.getDownloadURL();
       print('url : $url');
+      db.collection('group').doc(docID).update({
+        'imageURL' : url
+      });
     }).catchError((onError) {
       print(onError);
     });
