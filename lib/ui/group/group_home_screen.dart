@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:travel_record/data/group/group_class.dart';
 import 'package:travel_record/data/users/user_class.dart';
+import 'package:travel_record/ui/group/group_profile_screen.dart';
 import 'package:travel_record/ui/widget/group_hometab_widget.dart';
 
 class GroupHome extends StatelessWidget {
-  Users user = Get.find();
+  Users users = Get.find();
   Group group ;
 
   GroupHome({this.group});
@@ -56,11 +57,11 @@ class GroupHome extends StatelessWidget {
             ]),
             body: TabBarView(
               children: [
-                GroupHomeTab(user, group),
+                GroupHomeTab(users, group),
                 Tab(icon: Icon(Icons.directions_transit)),
                 Tab(icon: Icon(Icons.directions_bike)),
                 Tab(icon: Icon(Icons.directions_bike)),
-                Tab(icon: Icon(Icons.directions_bike))
+                GroupProfile()
               ],
             ),
           ),

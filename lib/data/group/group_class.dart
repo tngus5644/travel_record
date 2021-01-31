@@ -9,20 +9,19 @@ Group parseGroup(Map<String, dynamic> responseBody) {
 
 class Group extends HiveObject {
   String createAt;
-
-  // dynamic mainImage;
   String name;
   String introduce;
   String leader;
   List member;
   bool allowOpen;
+  String imageUrl;
 
   Group(
       {this.createAt,
       this.name,
       this.introduce,
       this.leader,
-      // this.mainImage,
+      this.imageUrl,
       this.allowOpen,
       this.member});
 
@@ -34,7 +33,7 @@ class Group extends HiveObject {
       introduce: json['introduce'] as String,
       leader: json['leader'] as String,
       member: json['member'] as List,
-      // mainImage: json['image'] as dynamic,
+      imageUrl: json['imageURL'] as String
     );
   }
 }

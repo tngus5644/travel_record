@@ -34,7 +34,7 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
   bool checked = false;
 
   Users users;
-
+  Group group;
   List belongGroup = [];
   List<Group> groups;
   List<String> _selectedFriends = [];
@@ -47,8 +47,10 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
   @override
   void initState() {
     super.initState();
+    group = new Group();
 
     users = widget.users;
+    groups = Get.find();
   }
 
   getGalleryImage() async {
@@ -92,48 +94,43 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
     final date = DateFormat('yyyyMMdd').format(DateTime.now());
     String docID;
 
+    group.createAt = date;
+    group.name = _nameController.text;
+    group.member = [users.name];
+    group.introduce = _introduceController.text;
+    group.allowOpen = release;
+    group.leader = users.name;
+
     ///group컬렉션의 documentID는 auto create 하고 입력한 필드 생성.
-     await db.collection('group').add({
-      'create_at': date,
-      'introduce': _introduceController.text,
-      'leader': users.name,
+    ///생성후에는 Image를 Storage의 docID에 저장하고 url에 downloadUrl 저장.
+    await db.collection('group').add({
+      'create_at': group.createAt,
+      'introduce': group.introduce,
+      'leader': group.leader,
       'allowOpen': release,
-      'name': _nameController.text,
-      'member': [users.name]
-    }).then((value) => docID = value.id);
+      'name': group.name,
+      'member': group.member
+    }).then((value) {
+      docID = value.id;
+      users.belongGroup.add(docID);
+      Reference ref = _storage.ref().child('group/$docID/main');
+      UploadTask uploadTask = ref.putFile(_image);
+      uploadTask.whenComplete(() async {
+        group.imageUrl = await ref.getDownloadURL();
+        db.collection('group').doc(docID).update({'imageURL': group.imageUrl});
+      }).whenComplete(() {
+        db
+            .collection('users')
+            .doc('tngus5644')
+            .update({'belong_group': users.belongGroup});
+        groups.add(group);
 
-    ///user doc의 belong_group 에 현재 그룹 추가.
-    db.collection('users').doc('tngus5644').get().then((DocumentSnapshot ds) {
-      belongGroup = ds.data()['belong_group'];
-      belongGroup.add(docID);
-
-      db
-          .collection('users')
-          .doc('tngus5644')
-          .update({'belong_group': belongGroup});
-    });
-
-    ///Image를 Storage의 docID에 저장하고 url에 downloadUrl 저장.
-    Reference ref = _storage.ref().child('group/$docID/main');
-    UploadTask uploadTask = ref.putFile(_image);
-    uploadTask.whenComplete(() async {
-      url = await ref.getDownloadURL();
-      print('url : $url');
-      db.collection('group').doc(docID).update({
-        'imageURL' : url
+        Get.put(users);
+        Get.put(groups);
+        Get.offAllNamed('home');
       });
-    }).catchError((onError) {
-      print(onError);
     });
 
-
-    users.belongGroup.add(docID);
-    groups = await getGroupFromFirebase(users);
-
-    Get.put(users);
-    Get.put(groups);
-    // Get.to(HomeHome(users:  users, groups : groups));
-    Get.offAllNamed('home');
   }
 
   Future<void> showOptionsDialog(BuildContext context) {

@@ -20,29 +20,21 @@ class _HomeHomeState extends State<HomeHome> {
   FirebaseStorage _storage = FirebaseStorage.instance;
   Users users;
   List<Group> groups;
-  String url;
+  List<String> url;
 
   @override
   initState() {
     super.initState();
+
     users = widget.users;
     groups = widget.groups;
-    url =
-        'https://firebasestorage.googleapis.com/v0/b/travel-record-93fbe.appspot.com/o/group%2F9SMCZKNmvyqhwlZAg0Ug%2Fmain?alt=media&token=481fd200-e4ef-4110-b992-edf36cb15c3c';
+    print(groups.length);
   }
 
-  getImageUrl() async {
-    url = await _storage
-        .ref()
-        .child('group')
-        .child('송우리')
-        .child('main.jpg')
-        .getDownloadURL();
-    print(url);
-  }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -77,7 +69,7 @@ class _HomeHomeState extends State<HomeHome> {
                                 Container(
                                     width: Get.width / 2,
                                     height: Get.width / 2,
-                                    child: Image.network(url)),
+                                    child: Image.network(groups[index].imageUrl)),
                                 Spacer(),
                                 Column(
                                   children: [
@@ -102,6 +94,7 @@ class _HomeHomeState extends State<HomeHome> {
               RaisedButton(
                   onPressed: () {
                     Get.toNamed('/makeGroup', arguments: users);
+                    Get.put(groups);
                   },
                   child: Icon(Icons.add))
             ],

@@ -24,8 +24,9 @@ class _LoginState extends State<Login> {
 
   bool doRemember = false;
 
+  Users users;
 
-  Users users; ///travel_record의 user
+  ///travel_record의 user
   Group group = Group();
   List<Group> groups = [];
 
@@ -36,6 +37,7 @@ class _LoginState extends State<Login> {
 
     for (int i = 0; i < users.belongGroup.length; i++) {
       ds = await db.collection("group").doc(users.belongGroup[i]).get();
+
       group = parseGroup(ds.data());
       groups.add(group);
     }
@@ -48,13 +50,11 @@ class _LoginState extends State<Login> {
     try {
       final user = await auth.signInWithEmailAndPassword(
           email: emailController.text, password: pwController.text);
-      user.user.isBlank? Get.snackbar('test', ' message') : Get.put(user);
+      user.user.isBlank ? Get.snackbar('test', ' message') : Get.put(user);
       Get.offAllNamed('home');
     } catch (e) {
       Get.snackbar('title', e.toString());
     }
-
-
   }
 
   @override
