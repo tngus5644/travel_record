@@ -39,7 +39,7 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
   List<Group> groups;
   List<String> _selectedFriends = [];
 
-  final imgPicker = ImagePicker();
+  ImagePicker imgPicker = ImagePicker();
   File _image;
 
   String url;
@@ -48,7 +48,6 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
   void initState() {
     super.initState();
     group = new Group();
-
     users = widget.users;
     groups = Get.find();
   }
@@ -139,24 +138,22 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text("Options"),
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: [
-                  GestureDetector(
-                    child: Text("카메라로 사진 찍기"),
-                    onTap: () {
-                      getCameraImage();
-                    },
-                  ),
-                  Padding(padding: EdgeInsets.all(10)),
-                  GestureDetector(
-                    child: Text("갤러리에서 가져오기"),
-                    onTap: () {
-                      getGalleryImage();
-                    },
-                  ),
-                ],
-              ),
+            content: ListBody(
+              children: [
+                GestureDetector(
+                  child: Text("카메라로 사진 찍기"),
+                  onTap: () {
+                    getCameraImage();
+                  },
+                ),
+                Padding(padding: EdgeInsets.all(10)),
+                GestureDetector(
+                  child: Text("갤러리에서 가져오기"),
+                  onTap: () {
+                    getGalleryImage();
+                  },
+                ),
+              ],
             ),
           );
         });

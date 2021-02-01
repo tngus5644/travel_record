@@ -32,7 +32,6 @@ class _LoginState extends State<Login> {
 
   Future<void> logIn() async {
     DocumentSnapshot ds = await db.collection('users').doc('tngus5644').get();
-
     users = parseUser(ds.data());
 
     for (int i = 0; i < users.belongGroup.length; i++) {

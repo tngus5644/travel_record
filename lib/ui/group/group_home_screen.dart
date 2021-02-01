@@ -2,17 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:travel_record/data/group/group_class.dart';
 import 'package:travel_record/data/users/user_class.dart';
+import 'package:travel_record/ui/group/group_hometab_widget.dart';
 import 'package:travel_record/ui/group/group_profile_screen.dart';
-import 'package:travel_record/ui/widget/group_hometab_widget.dart';
 
-class GroupHome extends StatelessWidget {
+
+class GroupHome extends StatefulWidget {
   Users users = Get.find();
   Group group ;
 
-  GroupHome({this.group});
+  GroupHome({Key key, this.group}) : super(key: key);
+  @override
+  _GroupHomeState createState() => _GroupHomeState();
+}
 
-  void initState() {}
+class _GroupHomeState extends State<GroupHome> {
+  Users users;
+  Group group;
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    users = widget.users;
+    group = widget.group;
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,10 +36,10 @@ class GroupHome extends StatelessWidget {
             appBar: TabBar(tabs: [
               Tab(
                   child: Icon(
-                Icons.home,
-                color: Colors.black,
-                size: 40,
-              )),
+                    Icons.home,
+                    color: Colors.black,
+                    size: 40,
+                  )),
               Tab(
                 child: Icon(
                   Icons.photo,
@@ -36,10 +49,10 @@ class GroupHome extends StatelessWidget {
               ),
               Tab(
                   child: Icon(
-                Icons.assignment_turned_in,
-                color: Colors.black,
-                size: 40,
-              )),
+                    Icons.assignment_turned_in,
+                    color: Colors.black,
+                    size: 40,
+                  )),
               Tab(
                 child: Icon(
                   Icons.chat,
@@ -57,7 +70,7 @@ class GroupHome extends StatelessWidget {
             ]),
             body: TabBarView(
               children: [
-                GroupHomeTab(users, group),
+                GroupHomeTab(user: users, group : group),
                 Tab(icon: Icon(Icons.directions_transit)),
                 Tab(icon: Icon(Icons.directions_bike)),
                 Tab(icon: Icon(Icons.directions_bike)),
@@ -70,3 +83,4 @@ class GroupHome extends StatelessWidget {
     );
   }
 }
+
