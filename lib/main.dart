@@ -1,3 +1,4 @@
+import 'package:travel_record/data/appstate.dart';
 import 'package:travel_record/data/group/group_class.dart';
 import 'package:travel_record/data/users/user_class.dart';
 import 'package:travel_record/ui/group/group_home_screen.dart';
@@ -20,11 +21,14 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hive/hive.dart';
 import 'file:///E:/Flutter/travel_record/lib/ui/group/group_write_screen.dart';
 
+
 void main() async {
+
   WidgetsFlutterBinding.ensureInitialized();
   await firebase_core.Firebase.initializeApp();
   await Firebase.initializeApp();
-  final directory = await getApplicationDocumentsDirectory();
+  await getApplicationDocumentsDirectory();
+
 
   // Hive
   //   ..init(directory.path)

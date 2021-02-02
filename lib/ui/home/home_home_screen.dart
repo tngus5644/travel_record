@@ -25,16 +25,12 @@ class _HomeHomeState extends State<HomeHome> {
   @override
   initState() {
     super.initState();
-
     users = widget.users;
     groups = widget.groups;
-    print(groups.length);
   }
-
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -43,7 +39,8 @@ class _HomeHomeState extends State<HomeHome> {
               GridView.builder(
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  itemCount: users.belongGroup.length,
+                  itemCount:
+                      users.belongGroup.isNull ? 0 : users.belongGroup.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 1,
                       childAspectRatio: Get.width / Get.height * 3),
@@ -69,7 +66,8 @@ class _HomeHomeState extends State<HomeHome> {
                                 Container(
                                     width: Get.width / 2,
                                     height: Get.width / 2,
-                                    child: Image.network(groups[index].imageUrl)),
+                                    child:
+                                        Image.network(groups[index].imageUrl)),
                                 Spacer(),
                                 Column(
                                   children: [

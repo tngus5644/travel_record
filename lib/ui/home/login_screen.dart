@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:travel_record/data/appstate.dart';
 import 'package:travel_record/data/group/group_class.dart';
 import 'package:travel_record/data/users/user_class.dart';
 
@@ -16,157 +18,123 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  TextEditingController emailController = TextEditingController();
-  TextEditingController pwController = TextEditingController();
-  FirebaseFirestore db = FirebaseFirestore.instance;
-  FirebaseStorage storage = FirebaseStorage.instance;
-  FirebaseAuth auth = FirebaseAuth.instance;
+  static final app = AppState(false, null, null, null);
+  final FirebaseFirestore db = FirebaseFirestore.instance;
+  final FirebaseStorage storage = FirebaseStorage.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   bool doRemember = false;
-
   Users users;
-
-  ///travel_record의 user
-  Group group = Group();
+  Group group;
   List<Group> groups = [];
 
+  void _signInWithGoogle() async {
+    setState(() {
+      app.loading = true;
+    });
+    final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
+    final AuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+    final UserCredential authResult =
+        await _auth.signInWithCredential(credential);
+    final User user = authResult.user;
+
+    setState(() {
+      app.loading = false;
+      app.user = user;
+    });
+    // assert(!user.isAnonymous);
+    // assert(await user.getIdToken() != null);
+    // currentUser = await _auth.currentUser;
+    // assert(user.uid == currentUser.uid);
+    if (app.user != null)
+      logIn();
+    else
+      print('login failed');
+  }
+
   Future<void> logIn() async {
-    DocumentSnapshot ds = await db.collection('users').doc('tngus5644').get();
+    // FirebaseAuth.instance.createUserWithEmailAndPassword(email: emailController.text, password: pwController.text);
+    db.collection('users').doc(app.user.uid).update({
+      "name": app.user.displayName,
+      "uid": app.user.uid,
+      "email": app.user.email,
+      "photoURL": app.user.photoURL,
+      "join_date": app.user.metadata.creationTime,
+      "lastSignInTime": app.user.metadata.lastSignInTime
+    });
+
+    DocumentReference _docRef = db.collection('users').doc(app.user.uid);
+    DocumentSnapshot ds = await _docRef.get();
     users = parseUser(ds.data());
 
-    for (int i = 0; i < users.belongGroup.length; i++) {
-      ds = await db.collection("group").doc(users.belongGroup[i]).get();
 
+    setState(() {
+      app.users = users;
+
+    });
+    if (!users.belongGroup.isNull) {
+      await _getUsersBelongGroup(users.belongGroup);
+      _putAndGo();
+
+    } else
+      _putAndGo();
+  }
+
+  _getUsersBelongGroup(List ref) async {
+    for (int i = 0; i < ref.length; i++) {
+      DocumentSnapshot ds = await ref[i].get();
       group = parseGroup(ds.data());
       groups.add(group);
     }
+  }
 
+  _putAndGo() {
     Get.put(groups);
     Get.put(users);
-
-    // FirebaseAuth.instance.createUserWithEmailAndPassword(email: emailController.text, password: pwController.text);
-
-    try {
-      final user = await auth.signInWithEmailAndPassword(
-          email: emailController.text, password: pwController.text);
-      user.user.isBlank ? Get.snackbar('test', ' message') : Get.put(user);
-      Get.offAllNamed('home');
-    } catch (e) {
-      Get.snackbar('title', e.toString());
-    }
+    Get.put(app.user);
+    Get.offAllNamed('home');
   }
 
   @override
   void initState() {
     super.initState();
-    getRememberInfo();
   }
 
   @override
   void dispose() {
-    setRememberInfo();
-    pwController.dispose();
-    emailController.dispose();
-
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Row(
+      body: Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            SizedBox(
-              width: 20,
+            Text(
+              'Login',
+              style: TextStyle(fontSize: 50),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 90),
-                Text(
-                  'Login',
-                  style: TextStyle(fontSize: 50),
-                ),
-                SizedBox(height: 90),
-                Text('Email'),
-                SizedBox(height: 10),
-                Container(
-                    width: (Get.width - 40),
-                    child: TextField(
-                      autofocus: true,
-                      controller: emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                          hintText: 'example@email.com',
-                          border: OutlineInputBorder()),
-                    )),
-                SizedBox(height: 20),
-                Text('password'),
-                SizedBox(height: 10),
-                Container(
-                    width: (Get.width - 40),
-                    child: TextField(
-                      controller: pwController,
-                      obscureText: true,
-                      decoration: InputDecoration(border: OutlineInputBorder()),
-                    )),
-                Row(
-                  children: <Widget>[
-                    Checkbox(
-                      value: doRemember,
-                      onChanged: (newValue) {
-                        setState(() {
-                          doRemember = newValue;
-                        });
-                      },
-                    ),
-                    Text("Remember Me")
-                  ],
-                ),
-                Row(
-                  children: [
-                    SizedBox(
-                      width: Get.width / 3,
-                    ),
-                    RaisedButton(
-                      onPressed: () {
-                        String email = 'tngus5644@gmail.com';
-                        FocusScope.of(context).requestFocus(new FocusNode());
-                        logIn();
-                      },
-                      child: Text('Login'),
-                      color: Colors.blueAccent,
-                    ),
-                  ],
-                )
-              ],
-            )
+            Center(
+              child: RaisedButton(
+                onPressed: () {
+                  _signInWithGoogle();
+                },
+                child: Text('SignInWithGoogle'),
+                color: Colors.blueAccent,
+              ),
+            ),
           ],
         ),
       ),
     );
-  }
-
-  getRememberInfo() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      doRemember = (prefs.getBool("doRemember") ?? false);
-    });
-    if (doRemember) {
-      setState(() {
-        emailController.text = (prefs.getString("userEmail") ?? "");
-        pwController.text = (prefs.getString("userPasswd") ?? "");
-      });
-    }
-  }
-
-  setRememberInfo() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool("doRemember", doRemember);
-    if (doRemember) {
-      prefs.setString("userEmail", emailController.text);
-      prefs.setString("userPasswd", pwController.text);
-    }
   }
 }

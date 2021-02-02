@@ -70,7 +70,7 @@ class _GroupHomeState extends State<GroupHome> {
             ]),
             body: TabBarView(
               children: [
-                GroupHomeTab(user: users, group : group),
+                GroupHomeTab(users: users, group : group),
                 Tab(icon: Icon(Icons.directions_transit)),
                 Tab(icon: Icon(Icons.directions_bike)),
                 Tab(icon: Icon(Icons.directions_bike)),

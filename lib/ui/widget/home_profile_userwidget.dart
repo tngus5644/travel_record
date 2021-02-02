@@ -4,7 +4,7 @@ import 'package:hive/hive.dart';
 import 'package:travel_record/data/users/user_class.dart';
 import 'package:travel_record/ui/home/login_screen.dart';
 
-Widget homeProfileUserWidget(Users user) {
+Widget homeProfileUserWidget(Users users) {
 
   final sex = true.obs;
   return Column(
@@ -28,10 +28,10 @@ Widget homeProfileUserWidget(Users user) {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Text(
-                  user.email,
+                  users.email,
                   style: TextStyle(fontSize: 15),
                 ),
-                user.loginType == 'email'
+                users.loginType == 'email'
                     ? CircleAvatar(
                         radius: 20,
                         backgroundImage:
@@ -61,7 +61,7 @@ Widget homeProfileUserWidget(Users user) {
                     bottom: BorderSide(color: Colors.black, width: 0.5))),
             width: Get.width * 3 / 5,
             child: Text(
-              user.name,
+              users.name,
               style: TextStyle(fontSize: 15),
             ),
           ),
@@ -85,7 +85,7 @@ Widget homeProfileUserWidget(Users user) {
                     bottom: BorderSide(color: Colors.black, width: 0.5))),
             width: Get.width * 3 / 5,
             child: Text(
-              user.birthday,
+              users.birthday,
               style: TextStyle(fontSize: 15),
             ),
           ),

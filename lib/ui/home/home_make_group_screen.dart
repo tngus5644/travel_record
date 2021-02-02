@@ -47,8 +47,8 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
   @override
   void initState() {
     super.initState();
-    group = new Group();
     users = widget.users;
+    group = Group();
     groups = Get.find();
   }
 
@@ -93,9 +93,12 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
     final date = DateFormat('yyyyMMdd').format(DateTime.now());
     String docID;
 
+    DocumentReference userRef = db.collection('users').doc(users.uid);
+
+
     group.createAt = date;
     group.name = _nameController.text;
-    group.member = [users.name];
+    group.member = [userRef];
     group.introduce = _introduceController.text;
     group.allowOpen = release;
     group.leader = users.name;
@@ -111,17 +114,15 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
       'member': group.member
     }).then((value) {
       docID = value.id;
-      users.belongGroup.add(docID);
+      DocumentReference groupRef = db.collection('group').doc(docID);
+      users.belongGroup.add(groupRef);
       Reference ref = _storage.ref().child('group/$docID/main');
+
       UploadTask uploadTask = ref.putFile(_image);
       uploadTask.whenComplete(() async {
         group.imageUrl = await ref.getDownloadURL();
-        db.collection('group').doc(docID).update({'imageURL': group.imageUrl});
-      }).whenComplete(() {
-        db
-            .collection('users')
-            .doc('tngus5644')
-            .update({'belong_group': users.belongGroup});
+        groupRef.update({'imageURL': group.imageUrl, 'gid': docID});
+        userRef.update({'belong_group': users.belongGroup});
         groups.add(group);
 
         Get.put(users);
@@ -129,7 +130,6 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
         Get.offAllNamed('home');
       });
     });
-
   }
 
   Future<void> showOptionsDialog(BuildContext context) {

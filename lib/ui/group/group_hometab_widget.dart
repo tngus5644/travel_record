@@ -8,7 +8,10 @@ import 'package:travel_record/data/group/group_class.dart';
 import 'package:travel_record/data/users/user_class.dart';
 
 class GroupHomeTab extends StatefulWidget {
-  GroupHomeTab({Key key, Users user, Group group}) : super(key : key);
+
+  GroupHomeTab({Key key, this.users, this.group}) : super(key : key);
+  Users users;
+  Group group;
 
   @override
   _GroupHomeTabState createState() => _GroupHomeTabState();
@@ -19,9 +22,11 @@ class _GroupHomeTabState extends State<GroupHomeTab> with AutomaticKeepAliveClie
   @override
   bool get wantKeepAlive => true;
 
+  Group group;
   @override
   void initState() {
     super.initState();
+    group = widget.group;
   }
 
   @override
@@ -46,7 +51,7 @@ class _GroupHomeTabState extends State<GroupHomeTab> with AutomaticKeepAliveClie
                 children: [
                   Column(
                     children: [
-                      Text('abafasfcba'),
+                      Text(group.name),
                       Text('Test'),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
