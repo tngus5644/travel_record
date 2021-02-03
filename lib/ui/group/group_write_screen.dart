@@ -24,7 +24,6 @@ class _GroupWriteState extends State<GroupWrite> {
   Users users;
   File file;
 
-
   @override
   void initState() {
     super.initState();
@@ -32,37 +31,70 @@ class _GroupWriteState extends State<GroupWrite> {
     users = Get.find();
     imgPicker = ImagePicker();
     _controller = TextEditingController();
-
   }
 
-  void saveData() async{
+  void saveData() async {
+    ///파일을 저장하기 위해 path 설정, saveFile 생성, 그 안에 Text 입력
     String path = await _localPath;
     File saveFile = await _localFile;
-    await writeCounter(5);
-  }
+    saveFile = await writeText(_controller.text);
 
+    ///Storage에 저장.
+    String docID = group.gid;
+    Reference ref = _storage.ref().child('group/$docID/post/test');
+    UploadTask uploadTask = ref.putFile(saveFile);
+
+
+
+  }
+  void loadData() async{
+    String docID = group.gid;
+    Reference ref = _storage.ref().child('group/$docID/post/test');
+    Directory tempDir = Directory.systemTemp;
+    File tempFile = File('${tempDir.path}/samplefilepath');
+    File loadFile;
+    DownloadTask _downloadTask = ref.writeToFile(tempFile);
+    await _downloadTask.then((snapshot) => setState(() {
+      loadFile = tempFile;
+    }));
+    _controller.text = await readText(loadFile);
+
+  }
 
   Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();
 
     return directory.path;
   }
+
   Future<File> get _localFile async {
     final path = await _localPath;
     return File('$path/post.txt');
   }
-  Future<File> writeCounter(int counter) async {
-    final file = await _localFile;
 
+  Future<File> writeText(String _string) async {
+    final file = await _localFile;
+    print(file);
     // 파일 쓰기
-    return file.writeAsString('$counter');
+    return file.writeAsString('$_string');
   }
 
+  Future<String> readText(File _file) async {
+    try {
+      // 파일 읽기.
+      String contents = await _file.readAsString();
+      print(contents.toString());
+      return contents.toString();
+    } catch (e) {
+      // 에러가 발생할 경우 0을 반환.
+      return 'error';
+    }
+  }
 
   void writeComplete() {
     saveData();
-    print('완료');
 
+    print('완료');
   }
 
   getGalleryImage() async {
@@ -99,6 +131,14 @@ class _GroupWriteState extends State<GroupWrite> {
               },
               child: Text(
                 '완료',
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              )),
+          TextButton(
+              onPressed: () {
+                loadData();
+              },
+              child: Text(
+                '불러오기',
                 style: TextStyle(color: Colors.white, fontSize: 20),
               ))
         ],
@@ -144,11 +184,11 @@ class _GroupWriteState extends State<GroupWrite> {
                           getCameraImage();
                           print('camera select');
                         }),
-                    IconButton(icon: Icon(Icons.photo), onPressed: () {
-                      setState(() {
-
-                      });
-                    }),
+                    IconButton(
+                        icon: Icon(Icons.photo),
+                        onPressed: () {
+                          setState(() {});
+                        }),
                     IconButton(icon: Icon(Icons.photo), onPressed: () {}),
                     IconButton(icon: Icon(Icons.photo), onPressed: () {}),
                   ],
