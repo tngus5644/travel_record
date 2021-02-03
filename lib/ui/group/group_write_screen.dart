@@ -1,34 +1,68 @@
 import 'dart:io';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:travel_record/data/group/group_class.dart';
+import 'package:travel_record/data/users/user_class.dart';
 
 class GroupWrite extends StatefulWidget {
-
-  GroupWrite({Key key}) : super(key : key);
+  GroupWrite({Key key}) : super(key: key);
 
   @override
   _GroupWriteState createState() => _GroupWriteState();
 }
 
-class _GroupWriteState extends State<GroupWrite> with AutomaticKeepAliveClientMixin<GroupWrite>{
-  @override
-  bool get wantKeepAlive => true;
+class _GroupWriteState extends State<GroupWrite> {
   TextEditingController _controller;
   ImagePicker imgPicker;
   File _image;
+  FirebaseStorage _storage = FirebaseStorage.instance;
+  Group group;
+  Users users;
+  File file;
+
 
   @override
   void initState() {
     super.initState();
+    group = Get.find();
+    users = Get.find();
     imgPicker = ImagePicker();
     _controller = TextEditingController();
+
   }
 
+  void saveData() async{
+    String path = await _localPath;
+    File saveFile = await _localFile;
+    await writeCounter(5);
+  }
+
+
+  Future<String> get _localPath async {
+    final directory = await getApplicationDocumentsDirectory();
+
+    return directory.path;
+  }
+  Future<File> get _localFile async {
+    final path = await _localPath;
+    return File('$path/post.txt');
+  }
+  Future<File> writeCounter(int counter) async {
+    final file = await _localFile;
+
+    // 파일 쓰기
+    return file.writeAsString('$counter');
+  }
+
+
   void writeComplete() {
-    print(_controller.text);
+    saveData();
     print('완료');
+
   }
 
   getGalleryImage() async {
@@ -50,7 +84,7 @@ class _GroupWriteState extends State<GroupWrite> with AutomaticKeepAliveClientMi
     return Scaffold(
       appBar: AppBar(
         title: Column(
-          children: [Text('글쓰기'), Text('aaba')],
+          children: [Text('글쓰기'), Text('aabaa')],
         ),
         leading: IconButton(
             icon: Icon(Icons.arrow_back_ios),
@@ -110,7 +144,11 @@ class _GroupWriteState extends State<GroupWrite> with AutomaticKeepAliveClientMi
                           getCameraImage();
                           print('camera select');
                         }),
-                    IconButton(icon: Icon(Icons.photo), onPressed: () {}),
+                    IconButton(icon: Icon(Icons.photo), onPressed: () {
+                      setState(() {
+
+                      });
+                    }),
                     IconButton(icon: Icon(Icons.photo), onPressed: () {}),
                     IconButton(icon: Icon(Icons.photo), onPressed: () {}),
                   ],

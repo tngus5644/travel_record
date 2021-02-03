@@ -42,7 +42,7 @@ class Users {
         friends = data['friends'],
         belongGroup = data['belong_group'];
 
-
+}
 // Users(
 //     {this.email,
 //     this.name,
@@ -76,5 +76,5 @@ class Users {
 //       belongGroup: json['belong_group'] as List
 //   );
 // }
-}
+
 

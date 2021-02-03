@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -23,10 +24,13 @@ class _GroupHomeTabState extends State<GroupHomeTab> with AutomaticKeepAliveClie
   bool get wantKeepAlive => true;
 
   Group group;
+  Users users;
+
   @override
   void initState() {
     super.initState();
     group = widget.group;
+    users = widget.users;
   }
 
   @override
@@ -64,6 +68,8 @@ class _GroupHomeTabState extends State<GroupHomeTab> with AutomaticKeepAliveClie
                     ],
                   ),
                   RaisedButton(onPressed: (){
+                    Get.put(group);
+                    Get.put(users);
                     Get.toNamed('/groupWrite');
                   }, child: Text('글쓰기'),color: Colors.blueAccent,)
                 ],
