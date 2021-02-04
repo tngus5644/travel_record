@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
@@ -7,9 +8,13 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:travel_record/data/group/group_class.dart';
 import 'package:travel_record/data/users/user_class.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 
 class GroupWrite extends StatefulWidget {
-  GroupWrite({Key key}) : super(key: key);
+  Group group;
+  Users users;
+
+  GroupWrite({Key key, this.group, this.users}) : super(key: key);
 
   @override
   _GroupWriteState createState() => _GroupWriteState();
@@ -23,42 +28,41 @@ class _GroupWriteState extends State<GroupWrite> {
   Group group;
   Users users;
   File file;
+  String markDownText;
+  List<int> imageBytes;
+  String base64Image;
+  DateTime now;
 
   @override
   void initState() {
     super.initState();
-    group = Get.find();
-    users = Get.find();
+    group = widget.group;
+    users = widget.users;
     imgPicker = ImagePicker();
     _controller = TextEditingController();
+    now = DateTime.now();
+    markDownText = ' ';
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 
   void saveData() async {
     ///파일을 저장하기 위해 path 설정, saveFile 생성, 그 안에 Text 입력
-    String path = await _localPath;
+    await _localPath;
     File saveFile = await _localFile;
     saveFile = await writeText(_controller.text);
 
     ///Storage에 저장.
     String docID = group.gid;
-    Reference ref = _storage.ref().child('group/$docID/post/test');
+    print(users.uid);
+    Reference ref = _storage
+        .ref()
+        .child('group/$docID/post/${users.uid}/${now.toString()}');
     UploadTask uploadTask = ref.putFile(saveFile);
-
-
-
-  }
-  void loadData() async{
-    String docID = group.gid;
-    Reference ref = _storage.ref().child('group/$docID/post/test');
-    Directory tempDir = Directory.systemTemp;
-    File tempFile = File('${tempDir.path}/samplefilepath');
-    File loadFile;
-    DownloadTask _downloadTask = ref.writeToFile(tempFile);
-    await _downloadTask.then((snapshot) => setState(() {
-      loadFile = tempFile;
-    }));
-    _controller.text = await readText(loadFile);
-
   }
 
   Future<String> get _localPath async {
@@ -91,10 +95,9 @@ class _GroupWriteState extends State<GroupWrite> {
     }
   }
 
-  void writeComplete() {
-    saveData();
-
-    print('완료');
+  writeComplete() async {
+    await saveData();
+    Get.back();
   }
 
   getGalleryImage() async {
@@ -116,7 +119,7 @@ class _GroupWriteState extends State<GroupWrite> {
     return Scaffold(
       appBar: AppBar(
         title: Column(
-          children: [Text('글쓰기'), Text('aabaa')],
+          children: [Text('글쓰기'), Text(group.name)],
         ),
         leading: IconButton(
             icon: Icon(Icons.arrow_back_ios),
@@ -133,14 +136,6 @@ class _GroupWriteState extends State<GroupWrite> {
                 '완료',
                 style: TextStyle(color: Colors.white, fontSize: 20),
               )),
-          TextButton(
-              onPressed: () {
-                loadData();
-              },
-              child: Text(
-                '불러오기',
-                style: TextStyle(color: Colors.white, fontSize: 20),
-              ))
         ],
       ),
       body: Stack(
@@ -159,7 +154,16 @@ class _GroupWriteState extends State<GroupWrite> {
                   minLines: 35,
                   maxLines: null,
                   autofocus: true,
-                )
+                  onChanged: (text) {
+                    setState(() {
+                      markDownText = text;
+                    });
+                  },
+                ),
+                Container(
+                    child: MarkdownBody(
+                  data: markDownText,
+                )),
               ],
             ),
           )),
@@ -187,17 +191,63 @@ class _GroupWriteState extends State<GroupWrite> {
                     IconButton(
                         icon: Icon(Icons.photo),
                         onPressed: () {
-                          setState(() {});
+                          setState(() {
+                            print(group.name);
+                          });
                         }),
                     IconButton(icon: Icon(Icons.photo), onPressed: () {}),
                     IconButton(icon: Icon(Icons.photo), onPressed: () {}),
                   ],
                 ),
                 decoration: BoxDecoration(color: Colors.pink),
-              ))
+              )),
+          // Positioned(
+          //     top: 0,
+          //     left: 0,
+          //     right: 0,
+          //     child: Container(
+          //       height: 50,
+          //       child: Row(
+          //         children: [
+          //           IconButton(
+          //               icon: Icon(Icons.text_fields),
+          //               onPressed: () {
+          //                 print('gallery select');
+          //               }),
+          //           IconButton(
+          //               icon: Icon(Icons.format_bold),
+          //               onPressed: () {
+          //                 print('camera select');
+          //               }),
+          //           IconButton(
+          //               icon: Icon(Icons.text_format),
+          //               onPressed: () {
+          //                 setState(() {});
+          //               }),
+          //           IconButton(icon: Icon(Icons.photo), onPressed: () {}),
+          //           IconButton(icon: Icon(Icons.photo), onPressed: () {}),
+          //         ],
+          //       ),
+          //       decoration: BoxDecoration(color: Colors.pink),
+          //     ))
         ],
       ),
       resizeToAvoidBottomPadding: true,
     );
+  }
+
+  void loadData() async {
+    String docID = group.gid;
+
+    ///docID폴더의 post 폴더 내의 test파일 get.
+    Reference ref = _storage.ref().child('group/$docID/post/test');
+    Directory tempDir = Directory.systemTemp;
+    File tempFile = File('${tempDir.path}/samplefilepath');
+    File loadFile;
+    DownloadTask _downloadTask = ref.writeToFile(tempFile);
+    await _downloadTask.then((snapshot) => setState(() {
+          loadFile = tempFile;
+        }));
+    _controller.text = await readText(loadFile);
   }
 }

@@ -95,7 +95,6 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
 
     DocumentReference userRef = db.collection('users').doc(users.uid);
 
-
     group.createAt = date;
     group.name = _nameController.text;
     group.member = [userRef];

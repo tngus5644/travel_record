@@ -35,8 +35,8 @@ dependencies:
   path_provider: ^1.6.24
   image_picker: ^0.6.7+21
   intl: ^0.16.1
-
-
+  flutter_markdown: ^0.5.2
+  zefyr: ^1.0.0-dev.2.0
   flutter:
     sdk: flutter
 

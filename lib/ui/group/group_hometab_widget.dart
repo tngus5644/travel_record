@@ -7,10 +7,10 @@ import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:travel_record/data/group/group_class.dart';
 import 'package:travel_record/data/users/user_class.dart';
+import 'package:travel_record/ui/group/group_write_screen.dart';
 
 class GroupHomeTab extends StatefulWidget {
-
-  GroupHomeTab({Key key, this.users, this.group}) : super(key : key);
+  GroupHomeTab({Key key, this.users, this.group}) : super(key: key);
   Users users;
   Group group;
 
@@ -18,8 +18,8 @@ class GroupHomeTab extends StatefulWidget {
   _GroupHomeTabState createState() => _GroupHomeTabState();
 }
 
-class _GroupHomeTabState extends State<GroupHomeTab> with AutomaticKeepAliveClientMixin<GroupHomeTab>{
-
+class _GroupHomeTabState extends State<GroupHomeTab>
+    with AutomaticKeepAliveClientMixin<GroupHomeTab> {
   @override
   bool get wantKeepAlive => true;
 
@@ -31,6 +31,7 @@ class _GroupHomeTabState extends State<GroupHomeTab> with AutomaticKeepAliveClie
     super.initState();
     group = widget.group;
     users = widget.users;
+    new GroupWrite();
   }
 
   @override
@@ -47,7 +48,6 @@ class _GroupHomeTabState extends State<GroupHomeTab> with AutomaticKeepAliveClie
                 child: Image.network(
                   'https://drizzleanddip.com/wp-content/uploads/2018/03/7O6A0695-768x1152.jpg',
                   fit: BoxFit.fill,
-
                 )),
             Container(
               child: Row(
@@ -63,15 +63,21 @@ class _GroupHomeTabState extends State<GroupHomeTab> with AutomaticKeepAliveClie
                           Text('그룹 공개 '),
                           Text('멤버 : 10'),
                           Icon(Icons.add)
-                        ],)
-
+                        ],
+                      )
                     ],
                   ),
-                  RaisedButton(onPressed: (){
-                    Get.put(group);
-                    Get.put(users);
-                    Get.toNamed('/groupWrite');
-                  }, child: Text('글쓰기'),color: Colors.blueAccent,)
+                  RaisedButton(
+                    onPressed: () {
+                      setState(() {});
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => new GroupWrite(group : group, users : users)));
+                    },
+                    child: Text('글쓰기'),
+                    color: Colors.blueAccent,
+                  )
                 ],
               ),
             ),
@@ -96,6 +102,4 @@ class _GroupHomeTabState extends State<GroupHomeTab> with AutomaticKeepAliveClie
       ),
     );
   }
-
-
 }
