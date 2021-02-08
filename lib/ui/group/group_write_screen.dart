@@ -50,19 +50,29 @@ class _GroupWriteState extends State<GroupWrite> {
     super.dispose();
   }
 
-  void saveData() async {
+  Future<void> saveData() async {
     ///파일을 저장하기 위해 path 설정, saveFile 생성, 그 안에 Text 입력
     await _localPath;
     File saveFile = await _localFile;
     saveFile = await writeText(_controller.text);
+    print(saveFile);
 
     ///Storage에 저장.
     String docID = group.gid;
     print(users.uid);
     Reference ref = _storage
         .ref()
-        .child('group/$docID/post/${users.uid}/${now.toString()}');
-    UploadTask uploadTask = ref.putFile(saveFile);
+        .child('group/$docID/post/${users.uid}+${now.toString()}text');
+    await ref.putFile(saveFile);
+  }
+
+  Future<void> saveImage() async {
+    print(_image.path);
+    String docID = group.gid;
+    Reference ref = _storage
+        .ref()
+        .child('group/$docID/post/${users.uid}+${now.toString()}');
+    await ref.putFile(_image);
   }
 
   Future<String> get _localPath async {
@@ -97,6 +107,7 @@ class _GroupWriteState extends State<GroupWrite> {
 
   writeComplete() async {
     await saveData();
+    if (_image != null) await saveImage();
     Get.back();
   }
 
