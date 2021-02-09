@@ -37,6 +37,7 @@ class _GroupHomeState extends State<GroupHome>
     group = widget.group;
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
