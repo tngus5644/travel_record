@@ -1,12 +1,12 @@
-import 'package:travel_record/data/appstate.dart';
-import 'package:travel_record/data/group/group_class.dart';
-import 'package:travel_record/data/users/user_class.dart';
-import 'package:travel_record/ui/group/group_home_screen.dart';
-import 'package:travel_record/ui/home/home_home_screen.dart';
+import 'package:travel_record/models/appstate.dart';
+import 'file:///E:/Flutter/travel_record/lib/models/group/group_class.dart';
+import 'file:///E:/Flutter/travel_record/lib/models/users/user_class.dart';
+import 'file:///E:/Flutter/travel_record/lib/view/group/group_home_screen.dart';
+import 'file:///E:/Flutter/travel_record/lib/view/home/home_home_screen.dart';
 
-import 'package:travel_record/ui/home/home_make_group_screen.dart';
-import 'package:travel_record/ui/home/home_screen.dart';
-import 'package:travel_record/ui/home/login_screen.dart';
+import 'file:///E:/Flutter/travel_record/lib/view/home/home_make_group_screen.dart';
+import 'file:///E:/Flutter/travel_record/lib/view/home/home_screen.dart';
+import 'file:///E:/Flutter/travel_record/lib/view/home/login_screen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,16 +19,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hive/hive.dart';
-import 'file:///E:/Flutter/travel_record/lib/ui/group/group_write_screen.dart';
-
+import 'file:///E:/Flutter/travel_record/lib/view/group/group_write_screen.dart';
 
 void main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
   await firebase_core.Firebase.initializeApp();
   await Firebase.initializeApp();
   await getApplicationDocumentsDirectory();
-
 
   // Hive
   //   ..init(directory.path)
@@ -44,6 +41,7 @@ void main() async {
     // It is not mandatory to use named routes, but dynamic urls are interesting.
     initialRoute: '/login',
     defaultTransition: Transition.native,
+    theme: ThemeData(),
     getPages: [
       //Simple GetPage
       GetPage(
@@ -57,22 +55,21 @@ void main() async {
       // GetPage with custom transitions and bindings
       GetPage(
         name: '/homeHome',
-        page: () => HomeHome(users: Get.find(),groups: Get.find()),
+        page: () => HomeHome(users: Get.find(), groups: Get.find()),
       ),
 
       GetPage(
         name: '/GroupHome',
-        page: () => GroupHome(group : Get.arguments),
+        page: () => GroupHome(group: Get.arguments),
       ),
       GetPage(
         name: '/makeGroup',
-        page: () => HomeMakeGroup(users : Get.arguments),
+        page: () => HomeMakeGroup(users: Get.arguments),
       ),
       GetPage(
         name: '/groupWrite',
         page: () => GroupWrite(),
       ),
-
     ],
   ));
 }

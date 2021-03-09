@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:travel_record/data/group/group_class.dart';
-import 'package:travel_record/data/users/user_class.dart';
-import 'package:travel_record/ui/group/group_hometab_widget.dart';
-import 'package:travel_record/ui/group/group_image_tab.dart';
-import 'package:travel_record/ui/group/group_profile_screen.dart';
+import 'file:///E:/Flutter/travel_record/lib/models/group/group_class.dart';
+import 'file:///E:/Flutter/travel_record/lib/models/users/user_class.dart';
+import 'file:///E:/Flutter/travel_record/lib/view/group/group_hometab_widget.dart';
+import 'file:///E:/Flutter/travel_record/lib/view/group/group_image_tab.dart';
+import 'package:travel_record/view/group/group_profile_screen.dart';
 
 class GroupHome extends StatefulWidget {
   Users users = Get.find();
@@ -36,7 +36,6 @@ class _GroupHomeState extends State<GroupHome>
     users = widget.users;
     group = widget.group;
   }
-
 
   @override
   Widget build(BuildContext context) {

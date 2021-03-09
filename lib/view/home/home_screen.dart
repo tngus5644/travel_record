@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:travel_record/data/group/group_class.dart';
-import 'package:travel_record/data/users/user_class.dart';
-import 'package:travel_record/ui/home/home_home_screen.dart';
-import 'package:travel_record/ui/home/home_profile_screen.dart';
+import 'file:///E:/Flutter/travel_record/lib/models/group/group_class.dart';
+import 'file:///E:/Flutter/travel_record/lib/models/users/user_class.dart';
+import 'file:///E:/Flutter/travel_record/lib/view/home/home_home_screen.dart';
+import 'package:travel_record/view/home/home_profile_screen.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -12,7 +12,11 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _selectedIndex = 0;
-  List<Widget> _pages = [HomeHome(users:Get.find(), groups:Get.find()), Text('page2'), HomeProfile(users: Get.find())];
+  List<Widget> _pages = [
+    HomeHome(users: Get.find(), groups: Get.find()),
+    Text('page2'),
+    HomeProfile(users: Get.find())
+  ];
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -21,9 +25,8 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      body:_pages[_selectedIndex],
+      body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(

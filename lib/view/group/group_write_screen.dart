@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:travel_record/data/group/group_class.dart';
-import 'package:travel_record/data/users/user_class.dart';
+import 'file:///E:/Flutter/travel_record/lib/models/group/group_class.dart';
+import 'file:///E:/Flutter/travel_record/lib/models/users/user_class.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
 class GroupWrite extends StatefulWidget {
@@ -243,7 +243,9 @@ class _GroupWriteState extends State<GroupWrite> {
           //     ))
         ],
       ),
-      resizeToAvoidBottomPadding: true,
+      resizeToAvoidBottomInset: true,
+      //flutter 2.0 업뎃하면서 아래 함수가 빨간줄 그어져서 대체해봄.
+      // resizeToAvoidBottomPadding: true,
     );
   }
 

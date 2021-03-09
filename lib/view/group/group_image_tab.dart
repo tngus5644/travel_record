@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:travel_record/data/group/group_class.dart';
-import 'package:travel_record/data/users/user_class.dart';
+import 'file:///E:/Flutter/travel_record/lib/models/group/group_class.dart';
+import 'file:///E:/Flutter/travel_record/lib/models/users/user_class.dart';
 
 class GroupImageTab extends StatefulWidget {
   GroupImageTab({Key key, this.users, this.group}) : super(key: key);
@@ -40,18 +40,15 @@ class _GroupImageTabState extends State<GroupImageTab> {
         .child('post')
         .listAll()
         .then((result) {
+      print(result.items);
       refList = result.items;
-
-
     });
     List<String> tempList = [];
     for (int i = 0; i < refList.length; i++) {
-
       String tempStr;
       tempStr = await refList[i].getDownloadURL();
       imageUrl.add(tempStr);
     }
-
   }
 
   @override
@@ -66,10 +63,15 @@ class _GroupImageTabState extends State<GroupImageTab> {
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3, childAspectRatio: 1.0),
               itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  color: Colors.redAccent,
-                  child: imageUrl.isNull? CircularProgressIndicator():imageGridWidget(imageUrl[index]),
-                  // child: Text(index.toString())
+                return GestureDetector(
+                  child: Container(
+                    color: Colors.redAccent,
+                    child: imageUrl.isNull
+                        ? CircularProgressIndicator()
+                        : imageGridWidget(imageUrl[index]),
+
+                    // child: Text(index.toString())
+                  ),
                 );
               }),
         ],

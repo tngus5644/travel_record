@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:travel_record/data/group/group_class.dart';
+import 'file:///E:/Flutter/travel_record/lib/models/group/group_class.dart';
 
 ///flutter pub run build_runner build
 
@@ -21,7 +21,7 @@ class Users {
 
   List belongGroup;
   List friends;
-
+  //
   DateTime joinDate;
   DateTime lastSignIn;
 
@@ -35,13 +35,10 @@ class Users {
         sex = data['sex'],
         birthday = data['birthday'],
         photoURL = data['photoURL'],
-
         joinDate = data['join_date'].toDate(),
         lastSignIn = data['lastSignInTime'].toDate(),
-
         friends = data['friends'],
         belongGroup = data['belong_group'];
-
 }
 // Users(
 //     {this.email,
@@ -76,5 +73,3 @@ class Users {
 //       belongGroup: json['belong_group'] as List
 //   );
 // }
-
-

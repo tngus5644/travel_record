@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
-import 'package:travel_record/data/users/user_class.dart';
-import 'package:travel_record/ui/home/login_screen.dart';
+import 'file:///E:/Flutter/travel_record/lib/models/users/user_class.dart';
+import 'file:///E:/Flutter/travel_record/lib/view/home/login_screen.dart';
 
 Widget homeProfileUserWidget(Users users) {
-
   final sex = true.obs;
   return Column(
     children: [
@@ -122,8 +121,7 @@ Widget homeProfileUserWidget(Users users) {
                       sex.value = false;
                     },
                     child: Text('여'),
-                    color: !sex.value ? Colors.blueAccent : Colors.white)
-                )
+                    color: !sex.value ? Colors.blueAccent : Colors.white))
               ],
             ),
           ),
@@ -132,7 +130,6 @@ Widget homeProfileUserWidget(Users users) {
       SizedBox(
         height: 20,
       ),
-
       Container(
         width: Get.width * 8 / 10,
         height: Get.height * 1 / 20,
@@ -148,7 +145,6 @@ Widget homeProfileUserWidget(Users users) {
       SizedBox(
         height: 30,
       ),
-
     ],
   );
 }

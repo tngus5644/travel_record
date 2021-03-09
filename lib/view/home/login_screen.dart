@@ -1,16 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:travel_record/data/appstate.dart';
-import 'package:travel_record/data/group/group_class.dart';
-import 'package:travel_record/data/users/user_class.dart';
+import 'package:travel_record/models/appstate.dart';
+import 'file:///E:/Flutter/travel_record/lib/models/group/group_class.dart';
+import 'file:///E:/Flutter/travel_record/lib/models/users/user_class.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:travel_record/ui/home/home_home_screen.dart';
+import 'file:///E:/Flutter/travel_record/lib/view/home/home_home_screen.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -73,15 +73,12 @@ class _LoginState extends State<Login> {
     DocumentSnapshot ds = await _docRef.get();
     users = parseUser(ds.data());
 
-
     setState(() {
       app.users = users;
-
     });
     if (!users.belongGroup.isNull) {
       await _getUsersBelongGroup(users.belongGroup);
       _putAndGo();
-
     } else
       _putAndGo();
   }

@@ -5,9 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
-import 'package:travel_record/data/group/group_class.dart';
-import 'package:travel_record/data/users/user_class.dart';
-import 'package:travel_record/ui/group/group_write_screen.dart';
+import 'file:///E:/Flutter/travel_record/lib/models/group/group_class.dart';
+import 'file:///E:/Flutter/travel_record/lib/models/users/user_class.dart';
+import 'file:///E:/Flutter/travel_record/lib/view/group/group_write_screen.dart';
 
 class GroupHomeTab extends StatefulWidget {
   GroupHomeTab({Key key, this.users, this.group}) : super(key: key);
@@ -26,17 +26,18 @@ class _GroupHomeTabState extends State<GroupHomeTab>
   Group group;
   Users users;
 
+  Image image;
   @override
   void initState() {
     super.initState();
     group = widget.group;
     users = widget.users;
-    new GroupWrite();
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
+
     FirebaseFirestore db = FirebaseFirestore.instance;
     return Tab(
       child: SingleChildScrollView(
@@ -45,10 +46,7 @@ class _GroupHomeTabState extends State<GroupHomeTab>
             Container(
                 height: Get.height / 5,
                 width: Get.width,
-                child: Image.network(
-                  'https://drizzleanddip.com/wp-content/uploads/2018/03/7O6A0695-768x1152.jpg',
-                  fit: BoxFit.fill,
-                )),
+                child: image.isBlank ? CircularProgressIndicator() : image),
             Container(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -73,7 +71,8 @@ class _GroupHomeTabState extends State<GroupHomeTab>
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => new GroupWrite(group : group, users : users)));
+                              builder: (context) =>
+                                  new GroupWrite(group: group, users: users)));
                     },
                     child: Text('글쓰기'),
                     color: Colors.blueAccent,

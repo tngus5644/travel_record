@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:travel_record/data/users/user_class.dart';
+import 'file:///E:/Flutter/travel_record/lib/models/users/user_class.dart';
 
 class GroupProfile extends StatefulWidget {
   @override
@@ -34,8 +34,9 @@ class _GroupProfileState extends State<GroupProfile> {
   void withdrawal() {
     print(users.belongGroup);
     users.belongGroup.removeAt(3);
-    db.collection('users').doc('tngus5644').update({
-      'belong_group' :  users.belongGroup
-    });
+    db
+        .collection('users')
+        .doc('tngus5644')
+        .update({'belong_group': users.belongGroup});
   }
 }

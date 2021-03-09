@@ -9,11 +9,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:travel_record/data/group/get_group_from_firebase.dart';
-import 'package:travel_record/data/group/group_class.dart';
-import 'package:travel_record/data/users/user_class.dart';
-import 'package:travel_record/ui/home/home_home_screen.dart';
-import 'package:travel_record/ui/widget/friends_select_widget.dart';
+import 'package:travel_record/models/group/get_group_from_firebase.dart';
+import 'file:///E:/Flutter/travel_record/lib/models/group/group_class.dart';
+import 'file:///E:/Flutter/travel_record/lib/models/users/user_class.dart';
+import 'file:///E:/Flutter/travel_record/lib/view/home/home_home_screen.dart';
+import 'package:travel_record/view/widget/friends_select_widget.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
 class HomeMakeGroup extends StatefulWidget {

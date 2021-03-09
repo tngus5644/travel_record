@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:travel_record/data/users/user_class.dart';
+import 'file:///E:/Flutter/travel_record/lib/models/users/user_class.dart';
 
-import 'group_class.dart';
+import '../../models/group/group_class.dart';
 
 Future<List<Group>> getGroupFromFirebase(Users users) async {
-  Group  group;
+  Group group;
   List<Group> groups = [];
   FirebaseFirestore db = FirebaseFirestore.instance;
 

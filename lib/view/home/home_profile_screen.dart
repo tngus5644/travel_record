@@ -1,13 +1,12 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:travel_record/ui/widget/home_profile_userwidget.dart';
-import 'package:travel_record/data/users/user_class.dart';
+import 'file:///E:/Flutter/travel_record/lib/view/widget/home_profile_userwidget.dart';
+import 'file:///E:/Flutter/travel_record/lib/models/users/user_class.dart';
 import 'package:hive/hive.dart';
-import 'package:travel_record/ui/widget/home_profile_socialwidget.dart';
+import 'file:///E:/Flutter/travel_record/lib/view/widget/home_profile_socialwidget.dart';
 
 class HomeProfile extends StatelessWidget {
   Users users;
-
 
   HomeProfile({Key key, this.users}) : super(key: key);
 

@@ -1,15 +1,25 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:travel_record/data/users/user_class.dart';
+import 'file:///E:/Flutter/travel_record/lib/models/users/user_class.dart';
 import 'package:get/get.dart';
+import 'package:travel_record/models/users/fetchUsers.dart';
 
 Future<void> selectFriends(BuildContext context, Users users) async {
+  final FirebaseFirestore db = FirebaseFirestore.instance;
   List<String> _selectedFriends = [];
   List<bool> friendCheck = [];
+  List<Users> friends = [];
   int i = 0;
+
+  // fetchUsers(users.friends[0]);
   while (i < users.friends.length) {
     friendCheck.add(false);
+    var temp = await users.friends[i].get();
+    Users tempUser = Users.fromMap(temp.data());
+    friends.add(tempUser);
     i++;
   }
+
   await showDialog(
     context: context,
     builder: (context) {
@@ -17,6 +27,7 @@ Future<void> selectFriends(BuildContext context, Users users) async {
         builder: (BuildContext context, StateSetter setState) {
           return AlertDialog(
             title: Text("친구 초대"),
+            // content: Container(),
             content: SingleChildScrollView(
                 child: Container(
               width: Get.width * 2 / 3,
@@ -32,12 +43,12 @@ Future<void> selectFriends(BuildContext context, Users users) async {
                             setState(() {
                               friendCheck[index] = value;
                               value
-                                  ? _selectedFriends.add(users.friends[index])
+                                  ? _selectedFriends.add(friends[index].name)
                                   : _selectedFriends.removeAt(index);
                             });
                           },
                         ),
-                        Text(users.friends[index])
+                        Text(friends[index].name)
                       ]),
                     );
                   }),
