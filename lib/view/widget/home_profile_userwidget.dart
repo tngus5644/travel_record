@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
-import 'file:///E:/Flutter/travel_record/lib/models/users/user_class.dart';
-import 'file:///E:/Flutter/travel_record/lib/view/home/login_screen.dart';
+
+import 'package:travel_record/models/users/user_class.dart';
+
+import 'package:travel_record/view/home/login_screen.dart';
 
 Widget homeProfileUserWidget(Users users) {
   final sex = true.obs;

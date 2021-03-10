@@ -1,12 +1,13 @@
 import 'package:travel_record/models/appstate.dart';
-import 'file:///E:/Flutter/travel_record/lib/models/group/group_class.dart';
-import 'file:///E:/Flutter/travel_record/lib/models/users/user_class.dart';
-import 'file:///E:/Flutter/travel_record/lib/view/group/group_home_screen.dart';
-import 'file:///E:/Flutter/travel_record/lib/view/home/home_home_screen.dart';
+import 'package:travel_record/models/group/group_class.dart';
+import 'package:travel_record/models/users/user_class.dart';
+import 'package:travel_record/view/home/home_home_screen.dart';
+import 'package:travel_record/view/home/home_screen.dart';
+import 'view/group/group_home_screen.dart';
 
-import 'file:///E:/Flutter/travel_record/lib/view/home/home_make_group_screen.dart';
-import 'file:///E:/Flutter/travel_record/lib/view/home/home_screen.dart';
-import 'file:///E:/Flutter/travel_record/lib/view/home/login_screen.dart';
+import 'package:travel_record/view/home/home_make_group_screen.dart';
+import 'package:travel_record/view/home/home_home_screen.dart';
+import 'package:travel_record/view/home/login_screen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,7 +20,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hive/hive.dart';
-import 'file:///E:/Flutter/travel_record/lib/view/group/group_write_screen.dart';
+import 'package:travel_record/view/group/group_write_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

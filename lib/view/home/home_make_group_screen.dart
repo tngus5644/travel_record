@@ -10,9 +10,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:travel_record/models/group/get_group_from_firebase.dart';
-import 'file:///E:/Flutter/travel_record/lib/models/group/group_class.dart';
-import 'file:///E:/Flutter/travel_record/lib/models/users/user_class.dart';
-import 'file:///E:/Flutter/travel_record/lib/view/home/home_home_screen.dart';
+
+import 'package:travel_record/models/group/group_class.dart';
+import 'package:travel_record/models/users/user_class.dart';
+import 'package:travel_record/view/home/home_home_screen.dart';
+
 import 'package:travel_record/view/widget/friends_select_widget.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
@@ -134,26 +136,39 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
   Future<void> showOptionsDialog(BuildContext context) {
     return showDialog(
         context: context,
-        builder: (BuildContext context) {
+        builder: (context) {
           return AlertDialog(
             title: Text("Options"),
-            content: ListBody(
-              children: [
-                GestureDetector(
-                  child: Text("카메라로 사진 찍기"),
-                  onTap: () {
-                    getCameraImage();
-                  },
+            content: Container(
+                child: Column(
+                  children: [
+                    GestureDetector(
+                      child: Text("카메라로 사진 찍기"),
+                      onTap: () {
+                        getCameraImage();
+                      },
+                    ),
+                    Padding(padding: EdgeInsets.all(10)),
+                    GestureDetector(
+                      child: Text("갤러리에서 가져오기"),
+                      onTap: () {
+                        getGalleryImage();
+                      },
+                    ),
+                  ],
                 ),
-                Padding(padding: EdgeInsets.all(10)),
-                GestureDetector(
-                  child: Text("갤러리에서 가져오기"),
+                width: Get.width * 2 / 3,
+                height: Get.height / 7),
+            actions: <Widget>[
+              GestureDetector(
                   onTap: () {
-                    getGalleryImage();
+                    Navigator.pop(context);
                   },
-                ),
-              ],
-            ),
+                  child: Text(
+                    'close',
+                    style: TextStyle(fontSize: 20),
+                  ))
+            ],
           );
         });
   }
@@ -287,7 +302,9 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
             RaisedButton(
               onPressed: () async {
                 await checkInputFields();
+
                 if (checked) await makeGroupComplete();
+                invitation(_selectedFriends);
 
                 // Get.toNamed('makeGroup/home');
               },
@@ -321,6 +338,13 @@ class _HomeMakeGroupState extends State<HomeMakeGroup> {
         );
       },
     );
+  }
+
+  ///초대를 하면 friends(users doc에 invitation reference 추가.
+  void invitation(List<String> selectedFriends) {
+    for (String i in _selectedFriends) {
+      // db.collection('users').doc()
+    }
   }
 
 // void _uploadImageToStorage(ImageSource source) async {

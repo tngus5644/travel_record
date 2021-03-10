@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'file:///E:/Flutter/travel_record/lib/models/group/group_class.dart';
-import 'file:///E:/Flutter/travel_record/lib/models/users/user_class.dart';
+import 'package:travel_record/models/group/group_class.dart';
+import 'package:travel_record/models/users/user_class.dart';
 
 class GroupImageTab extends StatefulWidget {
   GroupImageTab({Key key, this.users, this.group}) : super(key: key);

@@ -5,9 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
-import 'file:///E:/Flutter/travel_record/lib/models/group/group_class.dart';
-import 'file:///E:/Flutter/travel_record/lib/models/users/user_class.dart';
-import 'file:///E:/Flutter/travel_record/lib/view/group/group_write_screen.dart';
+import 'package:travel_record/models/group/group_class.dart';
+import 'package:travel_record/models/users/user_class.dart';
+import 'package:travel_record/view/group/group_write_screen.dart';
 
 class GroupHomeTab extends StatefulWidget {
   GroupHomeTab({Key key, this.users, this.group}) : super(key: key);
@@ -27,11 +27,15 @@ class _GroupHomeTabState extends State<GroupHomeTab>
   Users users;
 
   Image image;
+  String imageUrl;
+
   @override
   void initState() {
     super.initState();
     group = widget.group;
     users = widget.users;
+    imageUrl = group.imageUrl;
+    image = Image.network(imageUrl);
   }
 
   @override
@@ -44,9 +48,11 @@ class _GroupHomeTabState extends State<GroupHomeTab>
         child: Column(
           children: [
             Container(
-                height: Get.height / 5,
-                width: Get.width,
-                child: image.isBlank ? CircularProgressIndicator() : image),
+              height: Get.height / 5,
+              width: Get.width,
+              decoration: BoxDecoration(
+                  image: DecorationImage(image: image.image, fit: BoxFit.fill)),
+            ),
             Container(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

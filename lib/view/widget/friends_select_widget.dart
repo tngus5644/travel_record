@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'file:///E:/Flutter/travel_record/lib/models/users/user_class.dart';
+
+import 'package:travel_record/models/users/user_class.dart';
 import 'package:get/get.dart';
 import 'package:travel_record/models/users/fetchUsers.dart';
 

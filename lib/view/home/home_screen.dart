@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'file:///E:/Flutter/travel_record/lib/models/group/group_class.dart';
-import 'file:///E:/Flutter/travel_record/lib/models/users/user_class.dart';
-import 'file:///E:/Flutter/travel_record/lib/view/home/home_home_screen.dart';
+
+import 'package:travel_record/models/group/group_class.dart';
+import 'package:travel_record/models/users/user_class.dart';
+import 'package:travel_record/view/home/home_home_screen.dart';
 import 'package:travel_record/view/home/home_profile_screen.dart';
 
 class Home extends StatefulWidget {

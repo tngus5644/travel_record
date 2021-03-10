@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'file:///E:/Flutter/travel_record/lib/models/users/user_class.dart';
+import 'package:travel_record/models/users/user_class.dart';
 
-import '../../models/group/group_class.dart';
+import 'package:travel_record/models/group/group_class.dart';
 
 Future<List<Group>> getGroupFromFirebase(Users users) async {
   Group group;

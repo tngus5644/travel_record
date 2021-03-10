@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'file:///E:/Flutter/travel_record/lib/models/group/group_class.dart';
-import 'file:///E:/Flutter/travel_record/lib/models/users/user_class.dart';
-import 'file:///E:/Flutter/travel_record/lib/view/group/group_hometab_widget.dart';
-import 'file:///E:/Flutter/travel_record/lib/view/group/group_image_tab.dart';
+import 'package:travel_record/view/group/group_chat_tab.dart';
+
+import 'package:travel_record/models/group/group_class.dart';
+import 'package:travel_record/models/users/user_class.dart';
+
+import 'package:travel_record/view/group/group_hometab_widget.dart';
+import 'package:travel_record/view/group/group_image_tab.dart';
+
 import 'package:travel_record/view/group/group_profile_screen.dart';
 
 class GroupHome extends StatefulWidget {
@@ -27,7 +31,7 @@ class _GroupHomeState extends State<GroupHome>
   void initState() {
     // TODO: implement initState
     super.initState();
-    _controller = TabController(length: 5, vsync: this);
+    _controller = TabController(length: 4, vsync: this);
     _controller.addListener(() {
       setState(() {
         _selectedIndex = _controller.index;
@@ -61,17 +65,10 @@ class _GroupHomeState extends State<GroupHome>
                 ),
                 Tab(
                     child: Icon(
-                  Icons.assignment_turned_in,
+                  Icons.message,
                   color: Colors.black,
                   size: 40,
                 )),
-                Tab(
-                  child: Icon(
-                    Icons.chat,
-                    color: Colors.black,
-                    size: 40,
-                  ),
-                ),
                 Tab(
                   child: Icon(
                     Icons.settings,
@@ -86,8 +83,7 @@ class _GroupHomeState extends State<GroupHome>
               children: [
                 GroupHomeTab(users: users, group: group),
                 GroupImageTab(users: users, group: group),
-                Tab(icon: Icon(Icons.directions_bike)),
-                Tab(icon: Icon(Icons.directions_bike)),
+                GroupChatTab(users: users, group: group),
                 GroupProfile()
               ],
             ),

@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'file:///E:/Flutter/travel_record/lib/view/widget/home_profile_userwidget.dart';
-import 'file:///E:/Flutter/travel_record/lib/models/users/user_class.dart';
+import 'package:travel_record/view/widget/home_profile_userwidget.dart';
+import 'package:travel_record/models/users/user_class.dart';
 import 'package:hive/hive.dart';
-import 'file:///E:/Flutter/travel_record/lib/view/widget/home_profile_socialwidget.dart';
+import 'package:travel_record/view/widget/home_profile_socialwidget.dart';
 
 class HomeProfile extends StatelessWidget {
   Users users;
