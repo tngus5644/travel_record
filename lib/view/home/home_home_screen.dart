@@ -87,7 +87,8 @@ class _HomeHomeState extends State<HomeHome> {
                       onTap: () {
                         Get.put(groups[index]);
                         Get.put(users);
-                        Get.toNamed('/GroupHome', arguments: groups[index]);
+                        Get.toNamed('/GroupHome', arguments: groups[index])
+                            .then((value) => setState(() {}));
                       },
                     );
                   }),
