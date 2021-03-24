@@ -3,7 +3,8 @@
  
 
 ## 기본화면
-![image](https://user-images.githubusercontent.com/69678386/112291493-81498800-8cd3-11eb-9ae6-56804afc5d65.png){: width="50%" height="50%"}
+<img src = "https://user-images.githubusercontent.com/69678386/112291493-81498800-8cd3-11eb-9ae6-56804afc5d65.png" width="50%" height="50%">
+
 
 ## 그룹생성
 ![image](https://user-images.githubusercontent.com/69678386/112291574-91616780-8cd3-11eb-91fb-7b45526e7977.png){: width="50%" height="50%"}
