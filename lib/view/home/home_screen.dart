@@ -5,6 +5,7 @@ import 'package:travel_record/models/group/group_class.dart';
 import 'package:travel_record/models/users/user_class.dart';
 import 'package:travel_record/view/home/home_home_screen.dart';
 import 'package:travel_record/view/home/home_profile_screen.dart';
+import 'home_search_screen.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -15,7 +16,7 @@ class _HomeState extends State<Home> {
   int _selectedIndex = 0;
   List<Widget> _pages = [
     HomeHome(users: Get.find(), groups: Get.find()),
-    Text('page2'),
+    HomeSearch(),
     HomeProfile(users: Get.find())
   ];
   void _onItemTapped(int index) {

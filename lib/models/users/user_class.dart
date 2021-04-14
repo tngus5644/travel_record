@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'file:///E:/Flutter/travel_record/lib/models/group/group_class.dart';
+import 'package:travel_record/models/group/group_class.dart';
+
 
 ///flutter pub run build_runner build
 

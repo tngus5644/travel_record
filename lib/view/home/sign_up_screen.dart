@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 SignUpPageState pageState;
 
 class SignUpPage extends StatefulWidget {
@@ -26,7 +25,6 @@ class SignUpPageState extends State<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(title: Text("Sign-Up Page")),

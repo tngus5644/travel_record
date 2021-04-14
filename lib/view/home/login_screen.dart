@@ -32,6 +32,7 @@ class _LoginState extends State<Login> {
     setState(() {
       app.loading = true;
     });
+
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
     final GoogleSignInAuthentication googleAuth =
         await googleUser.authentication;
@@ -124,7 +125,10 @@ class _LoginState extends State<Login> {
                 onPressed: () {
                   _signInWithGoogle();
                 },
-                child: Text('SignInWithGoogle'),
+                child: Text(
+                  'SignInWithGoogle',
+                  style: TextStyle(fontSize: 20),
+                ),
                 color: Colors.blueAccent,
               ),
             ),
