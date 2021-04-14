@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HomeSearch extends StatefulWidget {
   @override
@@ -8,42 +10,26 @@ class HomeSearch extends StatefulWidget {
 }
 
 class _HomeSearchState extends State<HomeSearch> {
-  final List<String> _suggestions = [
-    'a',
-    'b',
-    'c',
-    'd',
-    'e',
-    'f',
-    'g',
-    'h',
-    'i',
-    'j',
-    'k',
-    'l',
-    'm',
-    'n',
-    'o',
-    'p',
-    'q',
-    'r',
-    's',
-    't'
-  ];
-  final fetchRow = 10;
-
-  var stream;
+  FirebaseFirestore db = FirebaseFirestore.instance;
+  QuerySnapshot qs;
   ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
+    getDoc();
     super.initState();
+  }
+
+  Future<void> getDoc() async {
+    qs = await db.collection('group').get();
+    print(qs.docs[1].data()["imageURL"]);
+    print('aa');
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: SingleChildScrollView(
+    return SingleChildScrollView(
+      child: SafeArea(
         child: Column(
           children: [
             Center(
@@ -54,7 +40,15 @@ class _HomeSearchState extends State<HomeSearch> {
                 ),
               ),
             ),
-            _buildList(),
+            FutureBuilder(
+                future: db.collection('group').get(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return _buildList();
+                  } else {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                }),
           ],
         ),
       ),
@@ -64,15 +58,27 @@ class _HomeSearchState extends State<HomeSearch> {
   Widget _buildList() {
     return ListView.builder(
         padding: const EdgeInsets.all(16.0),
-        itemCount: 10,
+        shrinkWrap: true,
+        itemCount: qs.docs.length,
         itemBuilder: (BuildContext context, int i) {
           return _buildRow(i);
         });
   }
 
   Widget _buildRow(int i) {
-    return Expanded(
-      child: ListTile(leading: Icon(Icons.person), title: Text('$i,a')),
+    return Container(
+      child: Row(
+        children: [
+          CachedNetworkImage(
+            imageUrl: qs.docs[i].data()["imageURL"],
+            width: 50,
+            height: 50,
+            placeholder: (context, url) => CircularProgressIndicator(),
+            errorWidget: (context, url, error) => Icon(Icons.error),
+          ),
+          Text(qs.docs[i].data()['name'])
+        ],
+      ),
     );
   }
 }
