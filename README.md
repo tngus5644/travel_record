@@ -26,8 +26,12 @@
 <img src = "https://user-images.githubusercontent.com/69678386/112291892-e56c4c00-8cd3-11eb-9eef-43214025c3ac.png" width="30%" height="30%">
 
 
+## 그룹 추천
+<img src = "https://user-images.githubusercontent.com/69678386/115028803-40bee200-9f00-11eb-81d8-eef136ae2087.png" width="30%" height="30%">
+
 ## 프로필
 <img src = "https://user-images.githubusercontent.com/69678386/112291934-ee5d1d80-8cd3-11eb-81bb-86b2b4cf68ca.png" width="30%" height="30%">
+
 
 
 
